@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import RQProvider from "@/hooks/RQProvider";
+
+import "./ui/globals.css";
+import styles from "@/app/ui/layout.module.css";
+import Sidebar from "./ui/shared/sidebar/sidebar";
+import Navbar from "./ui/shared/navbar/navbar";
+import Footer from "./ui/shared/footer/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +23,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <RQProvider>{children}</RQProvider>
+        <RQProvider>
+          <div className={styles.container}>
+            <div className={styles.menu}>
+              <Sidebar />
+            </div>
+            <div className={styles.content}>
+              <Navbar />
+              {children}
+              <Footer />
+            </div>
+          </div>
+        </RQProvider>
       </body>
     </html>
   );

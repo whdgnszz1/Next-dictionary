@@ -1,0 +1,95 @@
+.container {
+  background-color: var(--bgSoft);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addButton {
+  padding: 10px;
+  background-color: #5d57c9;
+  color: var(--text);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table td {
+  min-width: 100px;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 10px;
+}
+
+.table th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table .keywordColumn {
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.table .applyColumn {
+  min-width: 50px;
+  max-width: 50px;
+}
+
+.table .dateColumn {
+  min-width: 120px;
+  max-width: 120px;
+}
+
+.table .managementColumn {
+  min-width: 160px;
+  max-width: 160px;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userImage {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--text);
+  border: none;
+  cursor: pointer;
+}
+
+.view {
+  background-color: teal;
+}
+
+.delete {
+  background-color: crimson;
+}
