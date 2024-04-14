@@ -3,40 +3,23 @@
 import React, { FormEvent, useState } from "react";
 import styles from "@/app/ui/noun/addNoun/addNoun.module.css";
 import { useMutation } from "@tanstack/react-query";
+import { useCreateNoun } from "@/lib/noun/hooks";
 
 const AddNounPage: React.FC = () => {
   const [content, setContent] = useState("");
 
-  const postNoun = async (content: string) => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}schdic/api/v1/dic/noun`,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ content: content }),
-        }
-      );
-      if (!response.ok) {
-        throw new Error("잘못된 요청입니다.");
-      }
-      return response.json();
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const { mutate } = useMutation({
-    mutationKey: "postNoun",
-    mutationFn: postNoun,
+  const { mutate: createNoun } = useCreateNoun({
+    onSuccess: () => {
+      console.log("단어가 성공적으로 추가되었습니다.");
+    },
+    onError: (error) => {
+      console.error("단어 추가 중 오류가 발생했습니다.", error);
+    },
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate(content);
+    createNoun({ content });
   };
 
   return (

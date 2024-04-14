@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import RQProvider from "@/hooks/RQProvider";
+import RQProvider from "@/shared/component/RQProvider";
 
 import "./ui/globals.css";
 import styles from "@/app/ui/layout.module.css";
