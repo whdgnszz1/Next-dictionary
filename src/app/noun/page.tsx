@@ -6,6 +6,7 @@ import styles from "@/app/ui/noun/noun.module.css";
 
 import Link from "next/link";
 import { Noun } from "@/model/noun";
+import { useGetNounList } from "@/lib/noun/hooks/useGetNounList";
 
 type Props = {
   searchParams: {
@@ -15,6 +16,11 @@ type Props = {
 };
 
 const NounPage = () => {
+  const { data, isLoading, isError, error } = useGetNounList();
+
+  const nouns = data?.data;
+  const count = nouns?.length ?? 0;
+
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -61,7 +67,7 @@ const NounPage = () => {
               ))}
             </tbody>
           </table>
-          {/* <Pagination count={count} /> */}
+          <Pagination count={count} />
         </>
       )}
     </div>

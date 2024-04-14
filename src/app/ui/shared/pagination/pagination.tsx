@@ -1,6 +1,6 @@
 "use client";
 
-import { ITEM_PER_PAGE } from "@/lib/const";
+import { ITEM_PER_PAGE } from "@/shared/const";
 import styles from "./pagination.module.css";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 

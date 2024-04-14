@@ -1,3 +1,4 @@
+import { ApiResponse } from "@/shared/types/api-response";
 import { CreateNounDto, NounType, UpdateNounDto } from "./types";
 
 interface FetchAPIOptions {
@@ -33,8 +34,8 @@ async function fetchAPI<T>(url: string, options: FetchAPIOptions): Promise<T> {
   }
 }
 
-export async function getNounList(): Promise<NounType[]> {
-  return fetchAPI<NounType[]>("nouns", { method: "GET" });
+export async function getNounList(): Promise<ApiResponse<NounType[]>> {
+  return fetchAPI<ApiResponse<NounType[]>>("nouns", { method: "GET" });
 }
 
 export async function getNoun(nounId: number): Promise<NounType> {
