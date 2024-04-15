@@ -38,8 +38,8 @@ export async function getNounList(): Promise<ApiResponse<NounType[]>> {
   return fetchAPI<ApiResponse<NounType[]>>("nouns", { method: "GET" });
 }
 
-export async function getNoun(nounId: number): Promise<NounType> {
-  return fetchAPI<NounType>(`noun/${nounId}`, { method: "GET" });
+export async function getNoun(nounId: number): Promise<ApiResponse<NounType>> {
+  return fetchAPI<ApiResponse<NounType>>(`noun/${nounId}`, { method: "GET" });
 }
 
 export async function createNoun(createNounDto: CreateNounDto): Promise<void> {
