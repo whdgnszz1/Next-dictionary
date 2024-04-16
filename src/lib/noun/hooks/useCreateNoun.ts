@@ -5,12 +5,13 @@ import {
 } from "@tanstack/react-query";
 import { ApiError } from "next/dist/server/api-utils";
 import { CreateNounDto, NOUN_KEY, createNoun } from "..";
+import { ApiResponse } from "@/shared/types/api-response";
 
 export const useCreateNoun = (
-  options: MutationOptions<void, ApiError, CreateNounDto> = {}
+  options: MutationOptions<ApiResponse<any>, ApiError, CreateNounDto> = {}
 ) => {
   const client = useQueryClient();
-  return useMutation<void, ApiError, CreateNounDto>({
+  return useMutation<ApiResponse<any>, ApiError, CreateNounDto>({
     ...options,
     mutationFn: createNoun,
     onSuccess: (data, variable, ctx) => {

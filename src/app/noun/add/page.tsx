@@ -2,15 +2,17 @@
 
 import React, { FormEvent, useState } from "react";
 import styles from "@/app/ui/noun/addNoun/addNoun.module.css";
-import { useMutation } from "@tanstack/react-query";
 import { useCreateNoun } from "@/lib/noun/hooks";
+import { useRouter } from "next/navigation";
 
 const AddNounPage: React.FC = () => {
   const [content, setContent] = useState("");
+  const router = useRouter();
 
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
       console.log("단어가 성공적으로 추가되었습니다.");
+      router.push("/noun");
     },
     onError: (error) => {
       console.error("단어 추가 중 오류가 발생했습니다.", error);
@@ -27,7 +29,7 @@ const AddNounPage: React.FC = () => {
       <form onSubmit={handleSubmit} className={styles.form}>
         <input
           type="text"
-          placeholder="사용자 사전"
+          placeholder="단어 입력"
           name="content"
           required
           value={content}
