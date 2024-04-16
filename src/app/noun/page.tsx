@@ -7,6 +7,7 @@ import styles from "@/app/ui/noun/noun.module.css";
 import Link from "next/link";
 import { Noun } from "@/model/noun";
 import { useGetNounList } from "@/lib/noun/hooks/useGetNounList";
+import { useDeleteNoun } from "@/lib/noun/hooks/useDeleteNoun";
 
 type Props = {
   searchParams: {
@@ -16,10 +17,24 @@ type Props = {
 };
 
 const NounPage = () => {
-  const { data, isLoading, isError, error } = useGetNounList();
+  const { data } = useGetNounList();
+  const { mutate: deleteNoun } = useDeleteNoun({
+    onSuccess: () => {
+      console.log("사용자 사전이 성공적으로 삭제되었습니다.");
+    },
+    onError: (error) => {
+      console.error("Error deleting noun:", error);
+    },
+  });
 
   const nouns = data?.data;
   const count = nouns?.length ?? 0;
+
+  const handleDelete = (nounId: number) => {
+    if (confirm("정말로 삭제하시겠습니까?")) {
+      deleteNoun(nounId);
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -55,12 +70,13 @@ const NounPage = () => {
                           수정
                         </button>
                       </Link>
-                      <form action="">
-                        <input type="hidden" name="id" value={noun.id} />
-                        <button className={`${styles.button} ${styles.delete}`}>
-                          삭제
-                        </button>
-                      </form>
+                      <button
+                        type="button"
+                        className={`${styles.button} ${styles.delete}`}
+                        onClick={() => handleDelete(noun.id)}
+                      >
+                        삭제
+                      </button>
                     </div>
                   </td>
                 </tr>

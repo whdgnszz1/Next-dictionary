@@ -42,14 +42,21 @@ export async function getNoun(nounId: number): Promise<ApiResponse<NounType>> {
   return fetchAPI<ApiResponse<NounType>>(`noun/${nounId}`, { method: "GET" });
 }
 
-export async function createNoun(createNounDto: CreateNounDto): Promise<void> {
-  await fetchAPI<void>("noun", { method: "POST", body: createNounDto });
+export async function createNoun(
+  createNounDto: CreateNounDto
+): Promise<ApiResponse<any>> {
+  return await fetchAPI<ApiResponse<any>>("noun", {
+    method: "POST",
+    body: createNounDto,
+  });
 }
 
 export async function updateNoun(updateNounDto: UpdateNounDto): Promise<void> {
   await fetchAPI<void>("noun", { method: "PUT", body: updateNounDto });
 }
 
-export async function deleteNoun(nounId: number): Promise<void> {
-  await fetchAPI<void>(`noun/${nounId}`, { method: "DELETE" });
+export async function deleteNoun(nounId: number): Promise<ApiResponse<any>> {
+  return await fetchAPI<ApiResponse<any>>(`noun/${nounId}`, {
+    method: "DELETE",
+  });
 }
