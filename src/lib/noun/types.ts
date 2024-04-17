@@ -10,6 +10,11 @@ export type CreateNounDto = {
 };
 
 export type UpdateNounDto = {
+  id: number;
   content: string;
   isActive: boolean;
+};
+
+export type DeleteNounDto = {
+  id: number;
 };

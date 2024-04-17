@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/shared/types/api-response";
-import { CreateNounDto, NounType, UpdateNounDto } from "./types";
+import { CreateNounDto, NounType, UpdateNounDto, DeleteNounDto } from "./types";
 
 interface FetchAPIOptions {
   method: "GET" | "POST" | "PUT" | "DELETE";
@@ -51,12 +51,19 @@ export async function createNoun(
   });
 }
 
-export async function updateNoun(updateNounDto: UpdateNounDto): Promise<void> {
-  await fetchAPI<void>("noun", { method: "PUT", body: updateNounDto });
+export async function updateNoun(
+  updateNounDto: UpdateNounDto
+): Promise<ApiResponse<any>> {
+  return await fetchAPI<ApiResponse<any>>(`noun`, {
+    method: "PUT",
+    body: updateNounDto,
+  });
 }
 
-export async function deleteNoun(nounId: number): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>(`noun/${nounId}`, {
+export async function deleteNoun(
+  deleteNounDto: DeleteNounDto
+): Promise<ApiResponse<any>> {
+  return await fetchAPI<ApiResponse<any>>(`noun/${deleteNounDto.id}`, {
     method: "DELETE",
   });
 }

@@ -6,31 +6,29 @@ import styles from "@/app/ui/noun/noun.module.css";
 import Link from "next/link";
 import { useGetNounList } from "@/lib/noun/hooks/useGetNounList";
 import { useDeleteNoun } from "@/lib/noun/hooks/useDeleteNoun";
-import { useState } from "react";
+import { DeleteNounDto } from "@/lib/noun";
 
 const NounPage = () => {
   const { data } = useGetNounList();
   const nouns = data?.data;
   const count = nouns?.length ?? 0;
 
-  const [deletingNounId, setDeletingNounId] = useState<number | null>(null);
-
-  const deleteMutation = useDeleteNoun(deletingNounId as number, {
+  const deleteMutation = useDeleteNoun({
     onSuccess: () => {
       console.log("사용자 사전이 성공적으로 삭제되었습니다.");
-      setDeletingNounId(null);
     },
-    onError: (error) => {
+    onError: (error: unknown) => {
       console.error("Error deleting noun:", error);
-      setDeletingNounId(null);
     },
   });
 
   const handleDelete = (nounId: number) => {
     if (confirm("정말로 삭제하시겠습니까?")) {
       if (nounId !== null) {
-        setDeletingNounId(nounId);
-        deleteMutation.mutate(nounId);
+        const deleteNounDto: DeleteNounDto = {
+          id: nounId,
+        };
+        deleteMutation.mutate(deleteNounDto);
       }
     }
   };
@@ -56,7 +54,7 @@ const NounPage = () => {
             </thead>
             <tbody>
               {nouns.map((noun) => (
-                <tr key={noun.nounId}>
+                <tr key={noun.id}>
                   <td>
                     <div>{noun.content}</div>
                   </td>
@@ -64,7 +62,7 @@ const NounPage = () => {
                   <td>{noun.createdAt?.toString().slice(4, 16)}</td>
                   <td>
                     <div className={styles.buttons}>
-                      <Link href={`/noun/${noun.nounId}`}>
+                      <Link href={`/noun/${noun.id}`}>
                         <button className={`${styles.button} ${styles.view}`}>
                           수정
                         </button>
@@ -72,7 +70,7 @@ const NounPage = () => {
                       <button
                         type="button"
                         className={`${styles.button} ${styles.delete}`}
-                        onClick={() => handleDelete(noun.nounId)}
+                        onClick={() => handleDelete(noun.id)}
                       >
                         삭제
                       </button>
