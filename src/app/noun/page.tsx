@@ -3,36 +3,35 @@
 import Search from "@/app/ui/shared/search/search";
 import Pagination from "@/app/ui/shared/pagination/pagination";
 import styles from "@/app/ui/noun/noun.module.css";
-
 import Link from "next/link";
-import { Noun } from "@/model/noun";
 import { useGetNounList } from "@/lib/noun/hooks/useGetNounList";
 import { useDeleteNoun } from "@/lib/noun/hooks/useDeleteNoun";
-
-type Props = {
-  searchParams: {
-    q?: string;
-    page?: number;
-  };
-};
+import { useState } from "react";
 
 const NounPage = () => {
   const { data } = useGetNounList();
-  const { mutate: deleteNoun } = useDeleteNoun({
-    onSuccess: () => {
-      console.log("사용자 사전이 성공적으로 삭제되었습니다.");
-    },
-    onError: (error) => {
-      console.error("Error deleting noun:", error);
-    },
-  });
-
   const nouns = data?.data;
   const count = nouns?.length ?? 0;
 
+  const [deletingNounId, setDeletingNounId] = useState<number | null>(null);
+
+  const deleteMutation = useDeleteNoun(deletingNounId as number, {
+    onSuccess: () => {
+      console.log("사용자 사전이 성공적으로 삭제되었습니다.");
+      setDeletingNounId(null);
+    },
+    onError: (error) => {
+      console.error("Error deleting noun:", error);
+      setDeletingNounId(null);
+    },
+  });
+
   const handleDelete = (nounId: number) => {
     if (confirm("정말로 삭제하시겠습니까?")) {
-      deleteNoun(nounId);
+      if (nounId !== null) {
+        setDeletingNounId(nounId);
+        deleteMutation.mutate(nounId);
+      }
     }
   };
 
@@ -56,8 +55,8 @@ const NounPage = () => {
               </tr>
             </thead>
             <tbody>
-              {nouns.map((noun: Noun) => (
-                <tr key={noun.id}>
+              {nouns.map((noun) => (
+                <tr key={noun.nounId}>
                   <td>
                     <div>{noun.content}</div>
                   </td>
@@ -65,7 +64,7 @@ const NounPage = () => {
                   <td>{noun.createdAt?.toString().slice(4, 16)}</td>
                   <td>
                     <div className={styles.buttons}>
-                      <Link href={`/noun/${noun.id}`}>
+                      <Link href={`/noun/${noun.nounId}`}>
                         <button className={`${styles.button} ${styles.view}`}>
                           수정
                         </button>
@@ -73,7 +72,7 @@ const NounPage = () => {
                       <button
                         type="button"
                         className={`${styles.button} ${styles.delete}`}
-                        onClick={() => handleDelete(noun.id)}
+                        onClick={() => handleDelete(noun.nounId)}
                       >
                         삭제
                       </button>

@@ -8,11 +8,12 @@ import {
 } from "@tanstack/react-query";
 
 export const useDeleteNoun = (
+  nounId: number,
   options?: UseMutationOptions<ApiResponse<any>, ApiError, number>
 ) => {
   const client = useQueryClient();
   return useMutation<ApiResponse<any>, ApiError, number>({
-    mutationFn: deleteNoun,
+    mutationFn: () => deleteNoun(nounId),
     ...options,
     onSuccess: (data, variable, ctx) => {
       client.invalidateQueries({ queryKey: [NOUN_KEY] });
