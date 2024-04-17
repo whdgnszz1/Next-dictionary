@@ -58,7 +58,7 @@ const NounPage = () => {
                   <td>
                     <div>{noun.content}</div>
                   </td>
-                  <td>{noun.isActive === "true" ? "예" : "-"}</td>
+                  <td>{noun.isActive === "1" ? "예" : "-"}</td>
                   <td>{noun.createdAt?.toString().slice(4, 16)}</td>
                   <td>
                     <div className={styles.buttons}>

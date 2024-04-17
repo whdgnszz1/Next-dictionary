@@ -20,12 +20,12 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
   const router = useRouter();
 
   const [content, setContent] = useState("");
-  const [isActive, setIsActive] = useState("false");
+  const [isActive, setIsActive] = useState("0");
 
   useEffect(() => {
     if (noun) {
       setContent(noun.content || "");
-      setIsActive(noun.isActive);
+      setIsActive(noun.isActive ? "1" : "0");
     }
   }, [noun]);
 
@@ -73,8 +73,8 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
             value={isActive}
             onChange={handleIsActiveChange}
           >
-            <option value="true">예</option>
-            <option value="false">아니오</option>
+            <option value="1">예</option>
+            <option value="0">아니오</option>
           </select>
           <button type="submit">수정</button>
         </form>
