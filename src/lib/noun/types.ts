@@ -1,7 +1,7 @@
 export type NounType = {
   id: number;
   content: string;
-  isActive: boolean;
+  isActive: string;
   createdAt: string;
 };
 
@@ -12,7 +12,7 @@ export type CreateNounDto = {
 export type UpdateNounDto = {
   id: number;
   content: string;
-  isActive: boolean;
+  isActive: string;
 };
 
 export type DeleteNounDto = {

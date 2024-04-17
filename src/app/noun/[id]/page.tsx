@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // 올바른 라우터 경로를 사용하세요.
 import styles from "@/app/ui/noun/singleNoun/singleNoun.module.css";
-import { useGetNoun } from "@/lib/noun/hooks/useGetNoun";
-import { useUpdateNoun } from "@/lib/noun/hooks/useUpdateNoun";
 import { UpdateNounDto } from "@/lib/noun";
+import { useUpdateNoun } from "@/lib/noun/hooks/useUpdateNoun";
+import { useGetNoun } from "@/lib/noun/hooks/useGetNoun";
 
 interface SingleNounPageProps {
   params: {
@@ -21,11 +21,11 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
 
   const [content, setContent] = useState("");
   const [isActive, setIsActive] = useState("false");
-  console.log(isActive);
+
   useEffect(() => {
     if (noun) {
       setContent(noun.content || "");
-      setIsActive(noun.isActive ? "true" : "false");
+      setIsActive(noun.isActive);
     }
   }, [noun]);
 
@@ -50,16 +50,15 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
     const updateDto: UpdateNounDto = {
       id: nounId,
       content: content,
-      isActive: isActive === "true",
+      isActive: isActive,
     };
-    console.log(updateDto);
     updateNoun.mutate(updateDto);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
-        <form action="" className={styles.form} onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className={styles.form}>
           <label>사용자 사전</label>
           <input
             type="text"
