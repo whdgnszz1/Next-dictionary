@@ -8,6 +8,7 @@ export type SynonymType = {
 
 export type CreateSynonymDto = {
   content: string;
+  isOneWay: string;
 };
 
 export type UpdateSynonymDto = {
