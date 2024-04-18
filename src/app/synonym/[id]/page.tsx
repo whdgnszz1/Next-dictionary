@@ -9,13 +9,13 @@ import {
   useUpdateSynonym,
 } from "@/lib/synonym";
 
-interface SingleNounPageProps {
+interface SingleSynonymPageProps {
   params: {
     id: string;
   };
 }
 
-const SingleNounPage = ({ params }: SingleNounPageProps) => {
+const SingleSynonymPage = ({ params }: SingleSynonymPageProps) => {
   const synonymId = parseInt(params.id);
   const { data } = useGetSynonym(synonymId);
   const synonym = data?.data;
@@ -114,4 +114,4 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
   );
 };
 
-export default SingleNounPage;
+export default SingleSynonymPage;

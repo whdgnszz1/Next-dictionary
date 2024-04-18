@@ -3,36 +3,34 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "@/app/ui/noun/singleNoun/singleNoun.module.css";
-import { UpdateNounDto } from "@/lib/noun";
-import { useUpdateNoun } from "@/lib/noun/hooks/useUpdateNoun";
-import { useGetNoun } from "@/lib/noun/hooks/useGetNoun";
+import { UpdateStopDto, useGetStop, useUpdateStop } from "@/lib/stop";
 
-interface SingleNounPageProps {
+interface SingleStopPageProps {
   params: {
     id: string;
   };
 }
 
-const SingleNounPage = ({ params }: SingleNounPageProps) => {
-  const nounId = parseInt(params.id);
-  const { data } = useGetNoun(nounId);
-  const noun = data?.data;
+const SingleStopPage = ({ params }: SingleStopPageProps) => {
+  const stopId = parseInt(params.id);
+  const { data } = useGetStop(stopId);
+  const stop = data?.data;
   const router = useRouter();
 
   const [content, setContent] = useState("");
   const [isActive, setIsActive] = useState("0");
 
   useEffect(() => {
-    if (noun) {
-      setContent(noun.content || "");
-      setIsActive(noun.isActive === "1" ? "1" : "0");
+    if (stop) {
+      setContent(stop.content || "");
+      setIsActive(stop.isActive === "1" ? "1" : "0");
     }
-  }, [noun]);
+  }, [stop]);
 
-  const updateNoun = useUpdateNoun({
+  const updateStop = useUpdateStop({
     onSuccess: () => {
-      console.log("사용자 사전이 성공적으로 수정되었습니다.");
-      router.push("/noun");
+      console.log("노출 금지 사전이 성공적으로 수정되었습니다.");
+      router.push("/stop");
     },
     onError: (error) => {
       console.error("Update failed:", error);
@@ -47,12 +45,12 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const updateDto: UpdateNounDto = {
-      id: nounId,
+    const updateDto: UpdateStopDto = {
+      id: stopId,
       content: content,
       isActive: isActive,
     };
-    updateNoun.mutate(updateDto);
+    updateStop.mutate(updateDto);
   };
 
   return (
@@ -63,7 +61,7 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
           <input
             type="text"
             name="content"
-            placeholder="사용자 사전 내용 입력"
+            placeholder="노출 금지 사전 내용 입력"
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
@@ -83,4 +81,4 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
   );
 };
 
-export default SingleNounPage;
+export default SingleStopPage;
