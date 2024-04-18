@@ -4,9 +4,7 @@ import Search from "@/app/ui/shared/search/search";
 import Pagination from "@/app/ui/shared/pagination/pagination";
 import styles from "@/app/ui/noun/noun.module.css";
 import Link from "next/link";
-import { useGetNounList } from "@/lib/noun/hooks/useGetNounList";
-import { useDeleteNoun } from "@/lib/noun/hooks/useDeleteNoun";
-import { DeleteNounDto } from "@/lib/noun";
+import { useGetNounList, useDeleteNoun, DeleteNounDto } from "@/lib/noun";
 
 const NounPage = () => {
   const { data } = useGetNounList();
