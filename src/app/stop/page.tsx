@@ -2,7 +2,7 @@
 
 import Search from "@/app/ui/shared/search/search";
 import Pagination from "@/app/ui/shared/pagination/pagination";
-import styles from "@/app/ui/noun/noun.module.css";
+import styles from "@/app/ui/stop/stop.module.css";
 import Link from "next/link";
 import { DeleteStopDto, useDeleteStop, useGetStopList } from "@/lib/stop";
 
@@ -16,17 +16,17 @@ const StopPage = () => {
       console.log("노출 금지 사전이 성공적으로 삭제되었습니다.");
     },
     onError: (error: unknown) => {
-      console.error("Error deleting noun:", error);
+      console.error("Error deleting stop:", error);
     },
   });
 
   const handleDelete = (stopId: number) => {
     if (confirm("정말로 삭제하시겠습니까?")) {
       if (stopId !== null) {
-        const deleteNounDto: DeleteStopDto = {
+        const deleteStopDto: DeleteStopDto = {
           id: stopId,
         };
-        deleteMutation.mutate(deleteNounDto);
+        deleteMutation.mutate(deleteStopDto);
       }
     }
   };
