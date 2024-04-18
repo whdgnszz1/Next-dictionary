@@ -10,8 +10,8 @@ import { DeleteNounDto } from "@/lib/noun";
 
 const NounPage = () => {
   const { data } = useGetNounList();
-  const nouns = data?.data;
-  const count = nouns?.length ?? 0;
+  const nounList = data?.data;
+  const count = nounList?.length ?? 0;
 
   const deleteMutation = useDeleteNoun({
     onSuccess: () => {
@@ -41,7 +41,7 @@ const NounPage = () => {
           <button className={styles.addButton}>추가하기</button>
         </Link>
       </div>
-      {nouns && nouns.length > 0 && (
+      {nounList && nounList.length > 0 && (
         <>
           <table className={styles.table}>
             <thead>
@@ -53,7 +53,7 @@ const NounPage = () => {
               </tr>
             </thead>
             <tbody>
-              {nouns.map((noun) => (
+              {nounList.map((noun) => (
                 <tr key={noun.id}>
                   <td>
                     <div>{noun.content}</div>

@@ -11,8 +11,8 @@ import { DeleteSynonymDto } from "@/lib/synonym";
 
 const SynonymPage = () => {
   const { data } = useGetSynonymList();
-  const synonyms = data?.data;
-  const count = synonyms?.length ?? 0;
+  const synonymList = data?.data;
+  const count = synonymList?.length ?? 0;
 
   const deleteMutation = useDeleteSynonym({
     onSuccess: () => {
@@ -42,7 +42,7 @@ const SynonymPage = () => {
           <button className={styles.addButton}>추가하기</button>
         </Link>
       </div>
-      {synonyms && synonyms.length > 0 && (
+      {synonymList && synonymList.length > 0 && (
         <>
           <table className={styles.table}>
             <thead>
@@ -55,7 +55,7 @@ const SynonymPage = () => {
               </tr>
             </thead>
             <tbody>
-              {synonyms.map((synonym) => (
+              {synonymList.map((synonym) => (
                 <tr key={synonym.id}>
                   <td>
                     <div>{synonym.content}</div>
