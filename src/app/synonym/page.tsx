@@ -2,7 +2,7 @@
 
 import Search from "@/app/ui/shared/search/search";
 import Pagination from "@/app/ui/shared/pagination/pagination";
-import styles from "@/app/ui/noun/noun.module.css";
+import styles from "@/app/ui/synonym/synonym.module.css";
 import Link from "next/link";
 
 import { useGetSynonymList } from "@/lib/synonym/hooks/useGetSynonymList";
@@ -19,15 +19,15 @@ const SynonymPage = () => {
       console.log("동의어 사전이 성공적으로 삭제되었습니다.");
     },
     onError: (error: unknown) => {
-      console.error("Error deleting noun:", error);
+      console.error("Error deleting synonym:", error);
     },
   });
 
-  const handleDelete = (nounId: number) => {
+  const handleDelete = (synonymId: number) => {
     if (confirm("정말로 삭제하시겠습니까?")) {
-      if (nounId !== null) {
+      if (synonymId !== null) {
         const deleteSynonymDto: DeleteSynonymDto = {
-          id: nounId,
+          id: synonymId,
         };
         deleteMutation.mutate(deleteSynonymDto);
       }
