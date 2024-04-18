@@ -8,7 +8,6 @@
 .form {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   justify-content: space-between;
 }
 
@@ -23,9 +22,18 @@
   margin-bottom: 30px;
 }
 
-.form input,
+.form input[type="text"],
 .form select {
   width: 45%;
+}
+
+.form input[type="radio"] {
+  width: 10%;
+  margin-right: 5px;
+}
+
+.form .flex label {
+  margin-right: 20px;
 }
 
 .form textarea {
