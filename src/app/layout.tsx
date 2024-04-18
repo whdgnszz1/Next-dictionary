@@ -29,9 +29,13 @@ export default function RootLayout({
               <Sidebar />
             </div>
             <div className={styles.content}>
-              <Navbar />
-              {children}
-              <Footer />
+              <div>
+                <Navbar />
+                {children}
+              </div>
+              <div>
+                <Footer />
+              </div>
             </div>
           </div>
         </RQProvider>
