@@ -1,9 +1,23 @@
-import { ApiResponse } from "@/shared/types/api-response";
+import { ApiResponse, NounListResponse } from "@/shared/types/api-response";
 import { CreateNounDto, NounType, UpdateNounDto, DeleteNounDto } from "./types";
 import { fetchAPI } from "@/shared/api/fetchApi";
 
-export async function getNounList(): Promise<ApiResponse<NounType[]>> {
-  return fetchAPI<ApiResponse<NounType[]>>("nouns", { method: "GET" });
+export async function getNounList(
+  params: { q?: string; page?: number; size?: number } = {}
+): Promise<ApiResponse<NounListResponse>> {
+  const queryParams = new URLSearchParams();
+
+  if (params.q) queryParams.append("q", params.q);
+  if (params.page) queryParams.append("page", params.page.toString());
+  const size = params.size && params.size > 0 ? params.size : 10;
+  queryParams.append("size", size.toString());
+
+  return fetchAPI<ApiResponse<NounListResponse>>(
+    "nouns?" + queryParams.toString(),
+    {
+      method: "GET",
+    }
+  );
 }
 
 export async function getNoun(nounId: number): Promise<ApiResponse<NounType>> {

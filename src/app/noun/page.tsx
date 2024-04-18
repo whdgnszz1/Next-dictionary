@@ -1,15 +1,29 @@
 "use client";
 
+import React from "react";
 import Search from "@/app/ui/shared/search/search";
 import Pagination from "@/app/ui/shared/pagination/pagination";
 import styles from "@/app/ui/noun/noun.module.css";
 import Link from "next/link";
 import { useGetNounList, useDeleteNoun, DeleteNounDto } from "@/lib/noun";
 
-const NounPage = () => {
-  const { data } = useGetNounList();
-  const nounList = data?.data;
-  const count = nounList?.length ?? 0;
+type NounPageProps = {
+  searchParams: {
+    q?: string;
+    page?: string;
+  };
+};
+
+const NounPage = ({ searchParams }: NounPageProps) => {
+  const q = searchParams?.q || "";
+  const page = searchParams?.page || "1";
+
+  const { data } = useGetNounList({
+    q,
+    page: parseInt(page),
+  });
+  const nounList = data?.data.items;
+  const totalCount = data?.data.totalCount ?? 0;
 
   const deleteMutation = useDeleteNoun({
     onSuccess: () => {
@@ -22,12 +36,8 @@ const NounPage = () => {
 
   const handleDelete = (nounId: number) => {
     if (confirm("정말로 삭제하시겠습니까?")) {
-      if (nounId !== null) {
-        const deleteNounDto: DeleteNounDto = {
-          id: nounId,
-        };
-        deleteMutation.mutate(deleteNounDto);
-      }
+      const deleteNounDto: DeleteNounDto = { id: nounId };
+      deleteMutation.mutate(deleteNounDto);
     }
   };
 
@@ -53,9 +63,7 @@ const NounPage = () => {
             <tbody>
               {nounList.map((noun) => (
                 <tr key={noun.id}>
-                  <td>
-                    <div>{noun.content}</div>
-                  </td>
+                  <td>{noun.content}</td>
                   <td>{noun.isActive === "1" ? "예" : "-"}</td>
                   <td>{noun.createdAt?.toString().slice(4, 16)}</td>
                   <td>
@@ -66,7 +74,6 @@ const NounPage = () => {
                         </button>
                       </Link>
                       <button
-                        type="button"
                         className={`${styles.button} ${styles.delete}`}
                         onClick={() => handleDelete(noun.id)}
                       >
@@ -78,7 +85,7 @@ const NounPage = () => {
               ))}
             </tbody>
           </table>
-          <Pagination count={count} />
+          <Pagination count={totalCount} />
         </>
       )}
     </div>
