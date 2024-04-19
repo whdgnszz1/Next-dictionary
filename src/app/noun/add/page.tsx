@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 
 const AddNounPage: React.FC = () => {
   const [content, setContent] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const { mutate: createNoun } = useCreateNoun({
@@ -24,6 +25,16 @@ const AddNounPage: React.FC = () => {
     createNoun({ content });
   };
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    if (inputValue.includes(" ")) {
+      setError("띄어쓰기는 입력할 수 없습니다.");
+      setContent(inputValue.replace(/\s/g, ""));
+    } else {
+      setContent(inputValue);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <form onSubmit={handleSubmit} className={styles.form}>
@@ -33,8 +44,9 @@ const AddNounPage: React.FC = () => {
           name="content"
           required
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={handleChange}
         />
+        {error && <p className={styles.error}>{error}</p>}{" "}
         <button type="submit" className={styles.button}>
           등록하기
         </button>
