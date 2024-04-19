@@ -45,7 +45,6 @@ const StopPage = () => {
             <thead>
               <tr>
                 <td className={styles.keywordColumn}>키워드</td>
-                <td className={styles.applyColumn}>적용</td>
                 <td className={styles.dateColumn}>수정일</td>
                 <td className={styles.managementColumn}>관리</td>
               </tr>
@@ -56,7 +55,6 @@ const StopPage = () => {
                   <td>
                     <div>{stop.content}</div>
                   </td>
-                  <td>{stop.isActive === "1" ? "예" : "-"}</td>
                   <td>{stop.createdAt?.toString().slice(4, 16)}</td>
                   <td>
                     <div className={styles.buttons}>

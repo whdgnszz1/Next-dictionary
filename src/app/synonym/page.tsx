@@ -48,7 +48,6 @@ const SynonymPage = () => {
             <thead>
               <tr>
                 <td className={styles.keywordColumn}>키워드</td>
-                <td className={styles.applyColumn}>적용</td>
                 <td className={styles.applyColumn}>단방향 / 양방향</td>
                 <td className={styles.dateColumn}>수정일</td>
                 <td className={styles.managementColumn}>관리</td>
@@ -60,7 +59,6 @@ const SynonymPage = () => {
                   <td>
                     <div>{synonym.content}</div>
                   </td>
-                  <td>{synonym.isActive === "1" ? "예" : "-"}</td>
                   <td>{synonym.isOneWay === "1" ? "단방향" : "양방향"}</td>
                   <td>{synonym.createdAt?.toString().slice(4, 16)}</td>
                   <td>

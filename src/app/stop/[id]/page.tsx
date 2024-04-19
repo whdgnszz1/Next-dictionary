@@ -18,12 +18,10 @@ const SingleStopPage = ({ params }: SingleStopPageProps) => {
   const router = useRouter();
 
   const [content, setContent] = useState("");
-  const [isActive, setIsActive] = useState("0");
 
   useEffect(() => {
     if (stop) {
       setContent(stop.content || "");
-      setIsActive(stop.isActive === "1" ? "1" : "0");
     }
   }, [stop]);
 
@@ -37,18 +35,11 @@ const SingleStopPage = ({ params }: SingleStopPageProps) => {
     },
   });
 
-  const handleIsActiveChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setIsActive(event.target.value);
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const updateDto: UpdateStopDto = {
       id: stopId,
       content: content,
-      isActive: isActive,
     };
     updateStop.mutate(updateDto);
   };
@@ -66,14 +57,6 @@ const SingleStopPage = ({ params }: SingleStopPageProps) => {
             onChange={(e) => setContent(e.target.value)}
           />
           <label>적용</label>
-          <select
-            name="isActive"
-            value={isActive}
-            onChange={handleIsActiveChange}
-          >
-            <option value="1">예</option>
-            <option value="0">아니오</option>
-          </select>
           <button type="submit">수정</button>
         </form>
       </div>

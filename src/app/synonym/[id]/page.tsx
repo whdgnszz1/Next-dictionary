@@ -22,13 +22,11 @@ const SingleSynonymPage = ({ params }: SingleSynonymPageProps) => {
   const router = useRouter();
 
   const [content, setContent] = useState("");
-  const [isActive, setIsActive] = useState("0");
   const [isOneWay, setIsOneWay] = useState("0");
 
   useEffect(() => {
     if (synonym) {
       setContent(synonym.content || "");
-      setIsActive(synonym.isActive === "1" ? "1" : "0");
       setIsOneWay(synonym.isOneWay === "1" ? "1" : "0");
     }
   }, [synonym]);
@@ -43,18 +41,11 @@ const SingleSynonymPage = ({ params }: SingleSynonymPageProps) => {
     },
   });
 
-  const handleIsActiveChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setIsActive(event.target.value);
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const updateDto: UpdateSynonymDto = {
       id: synonymId,
       content: content,
-      isActive: isActive,
       isOneWay: isOneWay,
     };
     updateNoun.mutate(updateDto);
@@ -77,14 +68,6 @@ const SingleSynonymPage = ({ params }: SingleSynonymPageProps) => {
             onChange={(e) => setContent(e.target.value)}
           />
           <label>적용</label>
-          <select
-            name="isActive"
-            value={isActive}
-            onChange={handleIsActiveChange}
-          >
-            <option value="1">예</option>
-            <option value="0">아니오</option>
-          </select>
           <div>
             <label>
               <input

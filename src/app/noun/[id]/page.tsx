@@ -20,12 +20,10 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
   const router = useRouter();
 
   const [content, setContent] = useState("");
-  const [isActive, setIsActive] = useState("0");
 
   useEffect(() => {
     if (noun) {
       setContent(noun.content || "");
-      setIsActive(noun.isActive === "1" ? "1" : "0");
     }
   }, [noun]);
 
@@ -39,18 +37,11 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
     },
   });
 
-  const handleIsActiveChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setIsActive(event.target.value);
-  };
-
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const updateDto: UpdateNounDto = {
       id: nounId,
       content: content,
-      isActive: isActive,
     };
     updateNoun.mutate(updateDto);
   };
@@ -68,14 +59,6 @@ const SingleNounPage = ({ params }: SingleNounPageProps) => {
             onChange={(e) => setContent(e.target.value)}
           />
           <label>적용</label>
-          <select
-            name="isActive"
-            value={isActive}
-            onChange={handleIsActiveChange}
-          >
-            <option value="1">예</option>
-            <option value="0">아니오</option>
-          </select>
           <button type="submit">수정</button>
         </form>
       </div>

@@ -55,7 +55,6 @@ const NounPage = ({ searchParams }: NounPageProps) => {
             <thead>
               <tr>
                 <td className={styles.keywordColumn}>키워드</td>
-                <td className={styles.applyColumn}>적용</td>
                 <td className={styles.dateColumn}>수정일</td>
                 <td className={styles.managementColumn}>관리</td>
               </tr>
@@ -64,7 +63,6 @@ const NounPage = ({ searchParams }: NounPageProps) => {
               {nounList.map((noun) => (
                 <tr key={noun.id}>
                   <td>{noun.content}</td>
-                  <td>{noun.isActive === "1" ? "예" : "-"}</td>
                   <td>{noun.createdAt?.toString().slice(4, 16)}</td>
                   <td>
                     <div className={styles.buttons}>

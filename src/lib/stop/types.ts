@@ -1,7 +1,6 @@
 export type StopType = {
   id: number;
   content: string;
-  isActive: string;
   createdAt: string;
 };
 
@@ -12,7 +11,6 @@ export type CreateStopDto = {
 export type UpdateStopDto = {
   id: number;
   content: string;
-  isActive: string;
 };
 
 export type DeleteStopDto = {
