@@ -13,7 +13,7 @@ export async function getNounList(
   queryParams.append("size", size.toString());
 
   return fetchAPI<ApiResponse<NounListResponse>>(
-    "nouns?" + queryParams.toString(),
+    "/nouns?" + queryParams.toString(),
     {
       method: "GET",
     }
@@ -21,13 +21,13 @@ export async function getNounList(
 }
 
 export async function getNoun(nounId: number): Promise<ApiResponse<NounType>> {
-  return fetchAPI<ApiResponse<NounType>>(`noun/${nounId}`, { method: "GET" });
+  return fetchAPI<ApiResponse<NounType>>(`/noun/${nounId}`, { method: "GET" });
 }
 
 export async function createNoun(
   createNounDto: CreateNounDto
 ): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>("noun", {
+  return await fetchAPI<ApiResponse<any>>("/noun", {
     method: "POST",
     body: createNounDto,
   });
@@ -36,7 +36,7 @@ export async function createNoun(
 export async function updateNoun(
   updateNounDto: UpdateNounDto
 ): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>(`noun`, {
+  return await fetchAPI<ApiResponse<any>>(`/noun`, {
     method: "PUT",
     body: updateNounDto,
   });
@@ -45,7 +45,7 @@ export async function updateNoun(
 export async function deleteNoun(
   deleteNounDto: DeleteNounDto
 ): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>(`noun/${deleteNounDto.id}`, {
+  return await fetchAPI<ApiResponse<any>>(`/noun/${deleteNounDto.id}`, {
     method: "DELETE",
   });
 }
