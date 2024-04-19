@@ -20,6 +20,11 @@
   cursor: pointer;
 }
 
+.button_wrapper {
+  display: flex;
+  gap: 20px;
+}
+
 .table {
   width: 100%;
   border-collapse: collapse;

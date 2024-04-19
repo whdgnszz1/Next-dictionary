@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Search from "@/app/ui/shared/search/search";
 import Pagination from "@/app/ui/shared/pagination/pagination";
 import styles from "@/app/ui/noun/noun.module.css";
 import Link from "next/link";
 import { useGetNounList, useDeleteNoun, DeleteNounDto } from "@/lib/noun";
+import BulkUploadModal from "./_component/BulkUploadModal";
+import { Button, UploadFile } from "antd";
 
 type NounPageProps = {
   searchParams: {
@@ -15,6 +17,15 @@ type NounPageProps = {
 };
 
 const NounPage = ({ searchParams }: NounPageProps) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const showModal = () => setIsModalVisible(true);
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+  const handleCancel = () => setIsModalVisible(false);
+
   const q = searchParams?.q || "";
   const page = searchParams?.page || "1";
 
@@ -45,9 +56,22 @@ const NounPage = ({ searchParams }: NounPageProps) => {
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeholder="키워드 검색" />
-        <Link href="/noun/add">
-          <button className={styles.addButton}>추가하기</button>
-        </Link>
+        <div className={styles.button_wrapper}>
+          <Link href="/noun/add">
+            <Button>추가하기</Button>
+          </Link>
+          <Button onClick={showModal} type="primary">
+            대량 등록
+          </Button>
+          <BulkUploadModal
+            isVisible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            fileList={fileList}
+            updateFileList={setFileList}
+            target="noun"
+          />
+        </div>
       </div>
       {nounList && nounList.length > 0 && (
         <>
