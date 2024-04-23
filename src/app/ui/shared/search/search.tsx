@@ -1,10 +1,9 @@
 "use client";
 
 import React, { ChangeEvent } from "react";
-import styles from "./search.module.css";
-import { MdSearch } from "react-icons/md";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
+import { Button } from "antd";
 
 type Props = {
   placeholder: string;
@@ -32,14 +31,15 @@ function Search({ placeholder }: Props) {
   );
 
   return (
-    <div className={styles.container}>
-      <MdSearch />
+    <div className="flex items-center gap-[10px] p-[10px] w-full">
+      <p>키워드</p>
       <input
         type="text"
         placeholder={placeholder}
-        className={styles.input}
+        className="bg-transparent border-black border-[2px] outline-none py-1 px-2 rounded-lg text-sm"
         onChange={handleSearch}
       />
+      <Button className="border-[2px] border-black text-semibold">검색</Button>
     </div>
   );
 }
