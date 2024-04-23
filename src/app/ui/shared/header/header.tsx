@@ -23,7 +23,7 @@ function Header({ fileList, updateFileList }: HeaderProps) {
   const handleCancel = () => setIsModalVisible(false);
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center py-2">
       <Search placeholder="키워드 검색" />
       <div className="flex gap-2">
         <Link href="/noun/add">

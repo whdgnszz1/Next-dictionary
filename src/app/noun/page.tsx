@@ -2,6 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { Button, Table } from "antd";
+import { RcFile } from "antd/es/upload";
 import {
   useGetNounList,
   useDeleteNoun,
@@ -9,8 +11,6 @@ import {
   NounType,
 } from "@/lib/noun";
 import Header from "../ui/shared/header/header";
-import { RcFile } from "antd/es/upload";
-import { Button, Table } from "antd";
 
 type NounPageProps = {
   searchParams: {
@@ -21,6 +21,7 @@ type NounPageProps = {
 
 const NounPage = ({ searchParams }: NounPageProps) => {
   const [fileList, setFileList] = useState<RcFile[]>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   const q = searchParams?.q || "";
   const page = searchParams?.page || "1";
@@ -48,21 +49,36 @@ const NounPage = ({ searchParams }: NounPageProps) => {
     }
   };
 
+  const onSelectionChange = (selectedKeys: React.Key[]) => {
+    setSelectedRowKeys(selectedKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectionChange,
+  };
+
   const columns = [
     {
       title: "키워드",
       dataIndex: "content",
       key: "content",
+      sorter: (a: NounType, b: NounType) => a.content.localeCompare(b.content),
+      align: "center",
     },
     {
       title: "수정일",
       dataIndex: "createdAt",
       key: "createdAt",
+      sorter: (a: NounType, b: NounType) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       render: (text: string) => text?.toString().slice(4, 16),
+      align: "center",
     },
     {
       title: "관리",
       key: "action",
+      align: "center",
       render: (_: any, record: NounType) => (
         <div>
           <Link href={`/noun/${record.id}`}>
@@ -77,9 +93,10 @@ const NounPage = ({ searchParams }: NounPageProps) => {
   ];
 
   return (
-    <div className="p-5 rounded-xl mt-5">
+    <div className="mt-5 w-1/2">
       <Header fileList={fileList} updateFileList={setFileList} />
       <Table
+        rowSelection={rowSelection}
         columns={columns}
         dataSource={nounList}
         rowKey="id"

@@ -23,7 +23,7 @@ function Navbar() {
   return (
     <div>
       <div
-        className={`flex items-center text-black h-[48px] border-b-[${BORDER}px] border-black`}
+        className={`flex items-center text-black h-[48px] border-b-[2px] border-black`}
       >
         <Image
           src="/nav_logo.png"
