@@ -31,7 +31,7 @@ function Search({ placeholder }: Props) {
   );
 
   return (
-    <div className="flex items-center gap-[10px] p-[10px] w-full">
+    <div className="flex items-center gap-[10px] p-[10px]">
       <p>키워드</p>
       <input
         type="text"
@@ -39,7 +39,7 @@ function Search({ placeholder }: Props) {
         className="bg-transparent border-black border-[2px] outline-none py-1 px-2 rounded-lg text-sm"
         onChange={handleSearch}
       />
-      <Button className="border-[2px] border-black text-semibold">검색</Button>
+      <Button>검색</Button>
     </div>
   );
 }
