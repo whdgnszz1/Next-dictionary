@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import React from "react";
-import styles from "./navbar.module.css";
 
 function Navbar() {
   const pathname = usePathname();
@@ -18,8 +17,10 @@ function Navbar() {
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.title}>{pageTitle}</div>
+    <div>
+      <div className="flex items-center text-white h-[40px]">
+        네비게이션 바122
+      </div>
     </div>
   );
 }
