@@ -11,6 +11,7 @@ import {
   NounType,
 } from "@/lib/noun";
 import Header from "../ui/shared/header/header";
+import { ColumnsType } from "antd/es/table";
 
 type NounPageProps = {
   searchParams: {
@@ -58,7 +59,7 @@ const NounPage = ({ searchParams }: NounPageProps) => {
     onChange: onSelectionChange,
   };
 
-  const columns = [
+  const columns: ColumnsType<NounType> = [
     {
       title: "키워드",
       dataIndex: "content",
