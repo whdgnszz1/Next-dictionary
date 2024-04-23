@@ -21,6 +21,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
       console.log("단어가 성공적으로 추가되었습니다.");
+      setContent("");
       onOk();
     },
     onError: (error) => {
@@ -61,14 +62,22 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         </Button>,
       ]}
     >
-      <Input
-        type="text"
-        placeholder="단어 입력"
-        value={content}
-        onChange={handleChange}
-        maxLength={255}
-      />
+      <div className="flex gap-2">
+        <Input
+          type="text"
+          placeholder="단어 입력"
+          value={content}
+          onChange={handleChange}
+          maxLength={255}
+        />
+        <Button>추가</Button>
+      </div>
       {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
+      <div>
+        {/* TODO: 추가 버튼 입력했을 때 ES 서버에 요청해서 어휘 추출 결과, 형태소 분석 결과 받아오기 */}
+        <p className="font-bold py-4">색인어휘 추출결과 :</p>
+        <p className="font-bold">형태소 분석결과 : </p>
+      </div>
     </Modal>
   );
 };
