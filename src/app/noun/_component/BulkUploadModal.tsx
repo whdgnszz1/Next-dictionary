@@ -1,16 +1,15 @@
 import React from "react";
-import { Modal, Button, Upload } from "antd";
+import { Modal, Button, Upload, UploadProps } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import { UploadFile } from "antd/lib/upload/interface";
 import { fetchAPI } from "@/shared/api/fetchApi";
-import { RcFile } from "antd/es/upload";
+import { RcFile, UploadFile } from "antd/es/upload";
 
 interface BulkUploadModalProps {
   isVisible: boolean;
   onOk: () => void;
   onCancel: () => void;
-  fileList: UploadFile[];
-  updateFileList: (updateFn: (fileList: UploadFile[]) => UploadFile[]) => void;
+  fileList: RcFile[];
+  updateFileList: (updateFn: (fileList: RcFile[]) => RcFile[]) => void;
   target: string;
 }
 
@@ -24,27 +23,30 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
 }) => {
   const { Dragger } = Upload;
 
-  const uploadProps = {
+  const uploadProps: UploadProps = {
     onRemove: (file: UploadFile) => {
-      updateFileList((prevList) => {
-        const index = prevList.indexOf(file);
-        const newFileList = [...prevList];
-        newFileList.splice(index, 1);
-        return newFileList;
-      });
+      updateFileList((prevList) => prevList.filter((f) => f.uid !== file.uid));
+      return true;
     },
-    beforeUpload: (file: UploadFile) => {
+    beforeUpload: (file: RcFile, _: RcFile[]) => {
       updateFileList((prevList) => [...prevList, file]);
       return false;
     },
-    fileList,
+    fileList: fileList.map(
+      (file) =>
+        ({
+          ...file,
+          uid: file.uid,
+          name: file.name,
+          status: "done",
+        } as UploadFile)
+    ),
   };
 
   const handleUpload = async () => {
     const formData = new FormData();
     fileList.forEach((file) => {
-      formData.append("files", file as RcFile);
-      console.log(file.originFileObj);
+      formData.append("files", file as Blob);
     });
     formData.append("target", target);
 
@@ -57,12 +59,13 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
       onOk();
     } catch (error) {
       console.error("Upload failed:", error);
+      alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
     }
   };
-  console.log(123, fileList);
+
   return (
     <Modal
-      title="대량 단어 등록"
+      title="일괄 사전 등록"
       open={isVisible}
       onOk={handleUpload}
       onCancel={onCancel}

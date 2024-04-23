@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import { BORDER, getItemClass } from "./navbar.css.module";
+import { BORDER, getMenuItemClass } from "./navbar.css.module";
 
 function Navbar() {
   const router = useRouter();
@@ -34,7 +34,10 @@ function Navbar() {
         {menuItems.map((item) => (
           <div
             key={item.title}
-            className={getItemClass({ path: item.path, currentPath: pathname })}
+            className={getMenuItemClass({
+              path: item.path,
+              currentPath: pathname,
+            })}
             onClick={() => navigateTo(item.path)}
           >
             {item.title}

@@ -5,7 +5,7 @@ interface MenuItemStyleProps {
   currentPath: string;
 }
 
-export const getItemClass = ({
+export const getMenuItemClass = ({
   path,
   currentPath,
 }: MenuItemStyleProps): string => {
