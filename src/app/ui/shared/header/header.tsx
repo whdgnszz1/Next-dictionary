@@ -7,6 +7,7 @@ import { RcFile } from "antd/es/upload";
 
 import Search from "@/app/ui/shared/search/search";
 import BulkUploadModal from "@/app/noun/_component/BulkUploadModal";
+import SingleUploadModal from "@/app/noun/_component/SingleUploadModal";
 
 interface HeaderProps {
   fileList: RcFile[];
@@ -14,31 +15,38 @@ interface HeaderProps {
 }
 
 function Header({ fileList, updateFileList }: HeaderProps) {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isBulkModalVisible, setIsBulkModalVisible] = useState(false);
+  const [isSingleModalVisible, setIsSingleModalVisible] = useState(false);
 
-  const showModal = () => setIsModalVisible(true);
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-  const handleCancel = () => setIsModalVisible(false);
+  const showBulkModal = () => setIsBulkModalVisible(true);
+  const showSingleModal = () => setIsSingleModalVisible(true);
+  const handleBulkModalOk = () => setIsBulkModalVisible(false);
+  const handleBulkModalCancel = () => setIsBulkModalVisible(false);
+  const handleSingleModalOk = () => setIsSingleModalVisible(false);
+  const handleSingleModalCancel = () => setIsSingleModalVisible(false);
 
   return (
     <div className="flex items-center justify-between py-2">
       <Search placeholder="키워드 검색" />
       <div className="flex gap-2">
-        <Link href="/noun/add">
-          <Button type="primary">추가</Button>
-        </Link>
-        <Button onClick={showModal} type="primary">
+        <Button onClick={showSingleModal} type="primary">
+          추가
+        </Button>
+        <Button onClick={showBulkModal} type="primary">
           일괄 사용자 사전 등록
         </Button>
         <BulkUploadModal
-          isVisible={isModalVisible}
-          onOk={handleOk}
-          onCancel={handleCancel}
+          isVisible={isBulkModalVisible}
+          onOk={handleBulkModalOk}
+          onCancel={handleBulkModalCancel}
           fileList={fileList}
           updateFileList={updateFileList}
           target="noun"
+        />
+        <SingleUploadModal
+          isVisible={isSingleModalVisible}
+          onOk={handleSingleModalOk}
+          onCancel={handleSingleModalCancel}
         />
       </div>
     </div>
