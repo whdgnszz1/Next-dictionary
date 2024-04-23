@@ -1,12 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import Pagination from "@/app/ui/shared/pagination/pagination";
-import styles from "@/app/ui/noun/noun.module.css";
 import Link from "next/link";
-import { useGetNounList, useDeleteNoun, DeleteNounDto } from "@/lib/noun";
+import {
+  useGetNounList,
+  useDeleteNoun,
+  DeleteNounDto,
+  NounType,
+} from "@/lib/noun";
 import Header from "../ui/shared/header/header";
 import { RcFile } from "antd/es/upload";
+import { Button, Table } from "antd";
 
 type NounPageProps = {
   searchParams: {
@@ -21,7 +25,7 @@ const NounPage = ({ searchParams }: NounPageProps) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || "1";
 
-  const { data } = useGetNounList({
+  const { data, isLoading } = useGetNounList({
     q,
     page: parseInt(page),
   });
@@ -44,46 +48,48 @@ const NounPage = ({ searchParams }: NounPageProps) => {
     }
   };
 
+  const columns = [
+    {
+      title: "키워드",
+      dataIndex: "content",
+      key: "content",
+    },
+    {
+      title: "수정일",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (text: string) => text?.toString().slice(4, 16),
+    },
+    {
+      title: "관리",
+      key: "action",
+      render: (_: any, record: NounType) => (
+        <div>
+          <Link href={`/noun/${record.id}`}>
+            <Button type="link">수정</Button>
+          </Link>
+          <Button onClick={() => handleDelete(record.id)} type="link">
+            삭제
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
-    <div className={styles.container}>
+    <div className="p-5 rounded-xl mt-5">
       <Header fileList={fileList} updateFileList={setFileList} />
-      {nounList && nounList.length > 0 && (
-        <>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <td className={styles.keywordColumn}>키워드</td>
-                <td className={styles.dateColumn}>수정일</td>
-                <td className={styles.managementColumn}>관리</td>
-              </tr>
-            </thead>
-            <tbody>
-              {nounList.map((noun) => (
-                <tr key={noun.id}>
-                  <td>{noun.content}</td>
-                  <td>{noun.createdAt?.toString().slice(4, 16)}</td>
-                  <td>
-                    <div className={styles.buttons}>
-                      <Link href={`/noun/${noun.id}`}>
-                        <button className={`${styles.button} ${styles.view}`}>
-                          수정
-                        </button>
-                      </Link>
-                      <button
-                        className={`${styles.button} ${styles.delete}`}
-                        onClick={() => handleDelete(noun.id)}
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Pagination count={totalCount} />
-        </>
-      )}
+      <Table
+        columns={columns}
+        dataSource={nounList}
+        rowKey="id"
+        loading={isLoading}
+        pagination={{
+          total: totalCount,
+          pageSize: 10,
+          current: parseInt(page),
+        }}
+      />
     </div>
   );
 };
