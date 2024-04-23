@@ -62,9 +62,9 @@ const NounPage = ({ searchParams }: NounPageProps) => {
   const columns: ColumnsType<NounType> = [
     {
       title: "키워드",
-      dataIndex: "content",
-      key: "content",
-      sorter: (a: NounType, b: NounType) => a.content.localeCompare(b.content),
+      dataIndex: "term",
+      key: "term",
+      sorter: (a: NounType, b: NounType) => a.term.localeCompare(b.term),
       align: "center",
     },
     {

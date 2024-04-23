@@ -1,16 +1,16 @@
 export type NounType = {
   id: number;
-  content: string;
+  term: string;
   createdAt: string;
 };
 
 export type CreateNounDto = {
-  content: string;
+  term: string;
 };
 
 export type UpdateNounDto = {
   id: number;
-  content: string;
+  term: string;
 };
 
 export type DeleteNounDto = {

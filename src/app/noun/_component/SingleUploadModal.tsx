@@ -15,13 +15,13 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   onOk,
   onCancel,
 }) => {
-  const [content, setContent] = useState("");
+  const [term, setTerm] = useState("");
   const [error, setError] = useState("");
 
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
       console.log("단어가 성공적으로 추가되었습니다.");
-      setContent("");
+      setTerm("");
       onOk();
     },
     onError: (error) => {
@@ -30,8 +30,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   });
 
   const handleSubmit = () => {
-    if (content) {
-      createNoun({ content });
+    if (term) {
+      createNoun({ term });
     } else {
       setError("단어를 입력해주세요.");
     }
@@ -41,9 +41,9 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     const inputValue = e.target.value;
     if (inputValue.includes(" ")) {
       setError("띄어쓰기는 입력할 수 없습니다.");
-      setContent(inputValue.replace(/\s/g, ""));
+      setTerm(inputValue.replace(/\s/g, ""));
     } else {
-      setContent(inputValue);
+      setTerm(inputValue);
       setError("");
     }
   };
@@ -66,7 +66,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <Input
           type="text"
           placeholder="단어 입력"
-          value={content}
+          value={term}
           onChange={handleChange}
           maxLength={255}
         />
