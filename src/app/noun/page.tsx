@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Button, Table } from "antd";
+import { Button, Modal, Table } from "antd";
 import { RcFile } from "antd/es/upload";
 import {
   useGetNounList,
@@ -44,12 +44,17 @@ const NounPage = ({ searchParams }: NounPageProps) => {
   });
 
   const handleDelete = (nounId: number) => {
-    if (confirm("정말로 삭제하시겠습니까?")) {
-      const deleteNounDto: DeleteNounDto = { id: nounId };
-      deleteMutation.mutate(deleteNounDto);
-    }
+    Modal.confirm({
+      title: "정말로 삭제하시겠습니까?",
+      okText: "예",
+      okType: "danger",
+      cancelText: "아니오",
+      onOk() {
+        const deleteNounDto: DeleteNounDto = { id: nounId };
+        deleteMutation.mutate(deleteNounDto);
+      },
+    });
   };
-
   const onSelectionChange = (selectedKeys: React.Key[]) => {
     setSelectedRowKeys(selectedKeys);
   };
@@ -81,11 +86,11 @@ const NounPage = ({ searchParams }: NounPageProps) => {
       key: "action",
       align: "center",
       render: (_: any, record: NounType) => (
-        <div>
+        <div className="flex gap-2 justify-center items-center">
           <Link href={`/noun/${record.id}`}>
-            <Button type="link">수정</Button>
+            <Button type="primary">수정</Button>
           </Link>
-          <Button onClick={() => handleDelete(record.id)} type="link">
+          <Button onClick={() => handleDelete(record.id)} type="primary" danger>
             삭제
           </Button>
         </div>
