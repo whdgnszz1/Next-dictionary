@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 import { Button, Input } from "antd";
@@ -10,30 +10,35 @@ type Props = {
 };
 
 function Search({ placeholder }: Props) {
+  const [inputValue, setInputValue] = useState("");
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
 
-  const handleSearch = useDebouncedCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const params = new URLSearchParams(searchParams);
-      params.set("page", "1");
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
 
-      if (e.target.value) {
-        e.target.value.length >= 2 && params.set("q", e.target.value);
-      } else {
-        params.delete("q");
-      }
-
-      replace(`${pathname}?${params}`);
-    },
-    300
-  );
+  const handleSearch = () => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
+    if (inputValue.length >= 2) {
+      params.set("q", inputValue);
+    } else {
+      params.delete("q");
+    }
+    replace(`${pathname}?${params}`);
+  };
 
   return (
     <div className="flex items-center gap-[10px] p-[10px]">
-      <Input type="text" placeholder={placeholder} onChange={handleSearch} />
-      <Button>검색</Button>
+      <Input
+        type="text"
+        placeholder={placeholder}
+        value={inputValue}
+        onChange={handleInputChange}
+      />
+      <Button onClick={handleSearch}>검색</Button>
     </div>
   );
 }
