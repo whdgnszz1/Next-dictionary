@@ -3,7 +3,7 @@
 import React, { ChangeEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
-import { Button } from "antd";
+import { Button, Input } from "antd";
 
 type Props = {
   placeholder: string;
@@ -32,13 +32,7 @@ function Search({ placeholder }: Props) {
 
   return (
     <div className="flex items-center gap-[10px] p-[10px]">
-      <p>키워드</p>
-      <input
-        type="text"
-        placeholder={placeholder}
-        className="bg-transparent border-black border-[2px] outline-none py-1 px-2 rounded-lg text-sm"
-        onChange={handleSearch}
-      />
+      <Input type="text" placeholder={placeholder} onChange={handleSearch} />
       <Button>검색</Button>
     </div>
   );
