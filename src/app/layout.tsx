@@ -19,7 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <RQProvider>
-          <div className="flex flex-col justify-between h-screen px-[20px] pt-[40px]">
+          <div className="flex flex-col justify-between h-screen px-[20px] pt-[40px] pb-[20px]">
             <Navbar />
             <div className="h-full">{children}</div>
             <Footer />

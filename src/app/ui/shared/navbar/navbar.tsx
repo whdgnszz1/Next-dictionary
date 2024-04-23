@@ -3,16 +3,17 @@
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
+import { BORDER, getItemClass } from "./navbar.css.module";
 
 function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
 
   const menuItems = [
-    { title: "검색결과 비교", path: "/compare", borderStyle: "border-x-[2px]" },
-    { title: "검색어 분석", path: "/analyze", borderStyle: "border-r-[2px]" },
-    { title: "사용자 사전", path: "/noun", borderStyle: "border-r-[2px]" },
-    { title: "유의어 사전", path: "/synonym", borderStyle: "border-r-[2px]" },
+    { title: "검색결과 비교", path: "/compare" },
+    { title: "검색어 분석", path: "/analyze" },
+    { title: "사용자 사전", path: "/noun" },
+    { title: "유의어 사전", path: "/synonym" },
   ];
 
   const navigateTo = (path: string) => {
@@ -21,24 +22,19 @@ function Navbar() {
 
   return (
     <div>
-      <div className="flex items-center text-black h-[48px] border-b-[2px] border-black">
+      <div
+        className={`flex items-center text-black h-[48px] border-b-[${BORDER}px] border-black`}
+      >
         <Image
-          className="px-2"
           src="/nav_logo.png"
           alt="Navigation Logo"
-          width={100}
+          width={120}
           height={40}
         />
         {menuItems.map((item) => (
           <div
             key={item.title}
-            className={`flex items-center justify-center h-full ${
-              item.borderStyle
-            } border-t-[2px] px-6 font-bold border-black cursor-pointer ${
-              pathname.includes(item.path.substring(1))
-                ? "bg-[#374484] text-white"
-                : "bg-white text-black"
-            }`}
+            className={getItemClass({ path: item.path, currentPath: pathname })}
             onClick={() => navigateTo(item.path)}
           >
             {item.title}
