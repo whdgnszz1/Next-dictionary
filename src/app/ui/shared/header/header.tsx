@@ -7,7 +7,6 @@ import { RcFile } from "antd/es/upload";
 
 import Search from "@/app/ui/shared/search/search";
 import BulkUploadModal from "@/app/noun/_component/BulkUploadModal";
-import styles from "@/app/ui/noun/noun.module.css";
 
 interface HeaderProps {
   fileList: RcFile[];
@@ -24,11 +23,11 @@ function Header({ fileList, updateFileList }: HeaderProps) {
   const handleCancel = () => setIsModalVisible(false);
 
   return (
-    <div className={styles.top}>
+    <div className="flex items-center">
       <Search placeholder="키워드 검색" />
-      <div className={styles.button_wrapper}>
+      <div className="flex gap-2">
         <Link href="/noun/add">
-          <Button>추가하기</Button>
+          <Button type="primary">추가</Button>
         </Link>
         <Button onClick={showModal} type="primary">
           일괄 사용자 사전 등록
