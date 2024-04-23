@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import RQProvider from "@/shared/component/RQProvider";
 
 import "./ui/globals.css";
-import styles from "@/app/ui/layout.module.css";
-import Sidebar from "./ui/shared/sidebar/sidebar";
 import Navbar from "./ui/shared/navbar/navbar";
 import Footer from "./ui/shared/footer/footer";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,20 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <RQProvider>
-          <div className={styles.container}>
-            <div className={styles.menu}>
-              <Sidebar />
-            </div>
-            <div className={styles.content}>
-              <div>
-                <Navbar />
-                {children}
-              </div>
-              <div>
-                <Footer />
-              </div>
+          <div className="flex flex-col justify-between h-screen p-[20px]">
+            <div>
+              <Navbar />
+              {children}
+              <Footer />
             </div>
           </div>
         </RQProvider>
