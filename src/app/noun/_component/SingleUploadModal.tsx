@@ -1,6 +1,7 @@
 "use client";
 
 import { useCreateNoun } from "@/lib/noun";
+import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { Button, Input, Modal } from "antd";
 import { useState } from "react";
 
@@ -17,6 +18,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 }) => {
   const [term, setTerm] = useState("");
   const [error, setError] = useState("");
+  const [analysisResult, setAnalysisResult] = useState("");
 
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
@@ -29,23 +31,29 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     },
   });
 
-  const handleSubmit = () => {
-    if (term) {
-      createNoun({ term });
-    } else {
+  const handleAnalysis = async () => {
+    if (!term) {
       setError("단어를 입력해주세요.");
+      return;
+    }
+    try {
+      const result = await fetchElasticsearch(`/nori_index/_analyze`, {
+        method: "POST",
+        body: {
+          text: term,
+          analyzer: "nori",
+        },
+      });
+      setAnalysisResult(JSON.stringify(result, null, 2));
+    } catch (error) {
+      console.error("분석 중 오류가 발생했습니다", error);
+      setError("분석 중 오류가 발생했습니다.");
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    if (inputValue.includes(" ")) {
-      setError("띄어쓰기는 입력할 수 없습니다.");
-      setTerm(inputValue.replace(/\s/g, ""));
-    } else {
-      setTerm(inputValue);
-      setError("");
-    }
+    setTerm(e.target.value);
+    setError("");
   };
 
   return (
@@ -57,8 +65,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <Button key="cancel" onClick={onCancel}>
           취소
         </Button>,
-        <Button key="submit" type="primary" onClick={handleSubmit}>
-          등록하기
+        <Button key="submit" type="primary" onClick={handleAnalysis}>
+          추가
         </Button>,
       ]}
     >
@@ -70,14 +78,17 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
           onChange={handleChange}
           maxLength={255}
         />
-        <Button>추가</Button>
+        <Button onClick={handleAnalysis}>분석</Button>
       </div>
       {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
-      <div>
-        {/* TODO: 추가 버튼 입력했을 때 ES 서버에 요청해서 어휘 추출 결과, 형태소 분석 결과 받아오기 */}
-        <p className="font-bold py-4">색인어휘 추출결과 :</p>
-        <p className="font-bold">형태소 분석결과 : </p>
-      </div>
+      <p className="font-bold py-4">색인 어휘 추출 결과:</p>
+
+      {analysisResult && (
+        <div>
+          <p className="font-bold py-4">형태소 분석결과:</p>
+          <pre>{analysisResult}</pre>
+        </div>
+      )}
     </Modal>
   );
 };
