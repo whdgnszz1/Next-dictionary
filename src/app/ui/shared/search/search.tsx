@@ -26,11 +26,7 @@ function Search({ placeholder }: Props) {
   const performSearch = () => {
     const params = new URLSearchParams(searchParams);
     params.set("page", "1");
-    if (inputValue.length >= 2) {
-      params.set("q", inputValue);
-    } else {
-      params.delete("q");
-    }
+    params.set("q", inputValue.trim());
     replace(`${pathname}?${params}`);
   };
 
