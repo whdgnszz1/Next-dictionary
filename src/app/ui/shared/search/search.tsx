@@ -1,8 +1,7 @@
 "use client";
 
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useDebouncedCallback } from "use-debounce";
 import { Button, Input } from "antd";
 
 type Props = {
@@ -19,7 +18,12 @@ function Search({ placeholder }: Props) {
     setInputValue(e.target.value);
   };
 
-  const handleSearch = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    performSearch();
+  };
+
+  const performSearch = () => {
     const params = new URLSearchParams(searchParams);
     params.set("page", "1");
     if (inputValue.length >= 2) {
@@ -30,16 +34,29 @@ function Search({ placeholder }: Props) {
     replace(`${pathname}?${params}`);
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      performSearch();
+    }
+  };
+
   return (
-    <div className="flex items-center gap-[10px] p-[10px]">
+    <form
+      onSubmit={handleSubmit}
+      className="flex items-center gap-[10px] p-[10px]"
+    >
       <Input
         type="text"
         placeholder={placeholder}
         value={inputValue}
         onChange={handleInputChange}
+        onPressEnter={handleKeyPress}
       />
-      <Button onClick={handleSearch}>검색</Button>
-    </div>
+      <Button type="primary" htmlType="submit">
+        검색
+      </Button>
+    </form>
   );
 }
 
