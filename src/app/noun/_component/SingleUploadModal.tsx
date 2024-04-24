@@ -19,6 +19,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const [term, setTerm] = useState("");
   const [error, setError] = useState("");
   const [analysisResult, setAnalysisResult] = useState("");
+  const [userDefinedTerms, setUserDefinedTerms] = useState("");
 
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
@@ -31,20 +32,38 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     },
   });
 
+  const handleSubmit = () => {
+    if (term) {
+      createNoun({ term });
+    } else {
+      setError("단어를 입력해주세요.");
+    }
+  };
+
   const handleAnalysis = async () => {
     if (!term) {
       setError("단어를 입력해주세요.");
       return;
     }
+    setError("");
     try {
       const result = await fetchElasticsearch(`/nori_index/_analyze`, {
         method: "POST",
         body: {
           text: term,
           analyzer: "nori",
+          explain: true,
         },
       });
       setAnalysisResult(JSON.stringify(result, null, 2));
+
+      const definedTerms = result.detail.tokenizer.tokens
+        .filter((token) => {
+          return token.morphemes && token.morphemes.includes(token.token);
+        })
+        .map((token) => token.token)
+        .join(", ");
+      setUserDefinedTerms(definedTerms);
     } catch (error) {
       console.error("분석 중 오류가 발생했습니다", error);
       setError("분석 중 오류가 발생했습니다.");
@@ -58,15 +77,15 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   return (
     <Modal
-      title="단어 추가"
+      title="사용자 사전 등록"
       open={isVisible}
       onCancel={onCancel}
       footer={[
         <Button key="cancel" onClick={onCancel}>
           취소
         </Button>,
-        <Button key="submit" type="primary" onClick={handleAnalysis}>
-          추가
+        <Button key="submit" type="primary" onClick={handleSubmit}>
+          등록
         </Button>,
       ]}
     >
@@ -81,11 +100,16 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <Button onClick={handleAnalysis}>분석</Button>
       </div>
       {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
-      <p className="font-bold py-4">색인 어휘 추출 결과:</p>
+      {userDefinedTerms && (
+        <div>
+          <p className="font-bold py-4">색인 어휘 추출 결과:</p>
+          <pre>{userDefinedTerms}</pre>
+        </div>
+      )}
 
       {analysisResult && (
         <div>
-          <p className="font-bold py-4">형태소 분석결과:</p>
+          <p className="font-bold py-4">형태소 분석 결과:</p>
           <pre>{analysisResult}</pre>
         </div>
       )}
