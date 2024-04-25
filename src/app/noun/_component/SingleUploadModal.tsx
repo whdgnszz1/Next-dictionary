@@ -2,6 +2,7 @@
 
 import { useCreateNoun } from "@/lib/noun";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
+import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { Button, Input, Modal } from "antd";
 import { useState } from "react";
 
@@ -16,9 +17,9 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   onOk,
   onCancel,
 }) => {
-  const [term, setTerm] = useState("");
-  const [error, setError] = useState("");
-  const [analysisResult, setAnalysisResult] = useState("");
+  const [term, setTerm] = useState<string>("");
+  const [error, setError] = useState<string>("");
+  const [analysisResult, setAnalysisResult] = useState<string>("");
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
 
   const { mutate: createNoun } = useCreateNoun({
@@ -40,6 +41,13 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     }
   };
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleAnalysis();
+    }
+  };
+
   const handleAnalysis = async () => {
     if (!term) {
       setError("단어를 입력해주세요.");
@@ -47,14 +55,17 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     }
     setError("");
     try {
-      const result = await fetchElasticsearch(`/nori_index/_analyze`, {
-        method: "POST",
-        body: {
-          text: term,
-          analyzer: "nori",
-          explain: true,
-        },
-      });
+      const result: AnalyzeAPIResponse = await fetchElasticsearch(
+        `/nori_index/_analyze`,
+        {
+          method: "POST",
+          body: {
+            text: term,
+            analyzer: "nori",
+            explain: true,
+          },
+        }
+      );
       setAnalysisResult(JSON.stringify(result, null, 2));
 
       const definedTerms = result.detail.tokenizer.tokens
@@ -95,11 +106,11 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
           placeholder="단어 입력"
           value={term}
           onChange={handleChange}
-          maxLength={255}
+          onPressEnter={handleKeyPress}
         />
         <Button onClick={handleAnalysis}>분석</Button>
       </div>
-      {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
+      {error && <div className="text-red mt-[10px]">{error}</div>}
       {userDefinedTerms && (
         <div>
           <p className="font-bold py-4">색인 어휘 추출 결과:</p>
