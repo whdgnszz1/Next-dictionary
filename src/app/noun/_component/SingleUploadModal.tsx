@@ -19,7 +19,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 }) => {
   const [term, setTerm] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [analysisResult, setAnalysisResult] = useState<string>("");
+  const [analysisResult, setAnalysisResult] = useState<AnalyzeAPIResponse>();
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
 
   const { mutate: createNoun } = useCreateNoun({
@@ -66,7 +66,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
           },
         }
       );
-      setAnalysisResult(JSON.stringify(result, null, 2));
+      setAnalysisResult(result);
 
       const definedTerms = result.detail.tokenizer.tokens
         .filter((token) => {
@@ -113,15 +113,19 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       {error && <div className="text-red mt-[10px]">{error}</div>}
       {userDefinedTerms && (
         <div>
-          <p className="font-bold py-4">색인 어휘 추출 결과:</p>
+          <p className="font-bold pt-4 pb-2">색인 어휘 추출 결과:</p>
           <pre>{userDefinedTerms}</pre>
         </div>
       )}
 
+      <p className="font-bold pt-4 pb-2">형태소 분석 결과:</p>
       {analysisResult && (
         <div>
-          <p className="font-bold py-4">형태소 분석 결과:</p>
-          <pre>{analysisResult}</pre>
+          {analysisResult.detail.tokenizer.tokens.map((token, index) => (
+            <div key={index}>
+              <pre>{`${token.token} : ${token.leftPOS}`}</pre>
+            </div>
+          ))}
         </div>
       )}
     </Modal>
