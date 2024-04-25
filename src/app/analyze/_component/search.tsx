@@ -7,9 +7,10 @@ import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 
 type Props = {
   placeholder: string;
+  onSearchResults: (results: any[]) => void;
 };
 
-function AnalyzeSearch({ placeholder }: Props) {
+function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
   const [term, setTerm] = useState<string>("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,22 +30,26 @@ function AnalyzeSearch({ placeholder }: Props) {
           },
         }
       );
-      console.log(result);
+
+      const tokens = result.detail.tokenizer.tokens.map((token) => ({
+        text: token.token,
+        start: token.start_offset,
+        end: token.end_offset,
+        type: token.type,
+      }));
+      onSearchResults(tokens);
     } catch (error) {
       console.error("분석 중 오류가 발생했습니다", error);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAnalysis();
+      onSearchResults([]);
     }
   };
 
   return (
     <form
-      onSubmit={handleAnalysis}
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleAnalysis();
+      }}
       className="flex items-center gap-[10px] p-[10px]"
     >
       <Input
@@ -52,7 +57,7 @@ function AnalyzeSearch({ placeholder }: Props) {
         placeholder={placeholder}
         value={term}
         onChange={handleInputChange}
-        onPressEnter={handleKeyPress}
+        onPressEnter={handleAnalysis}
       />
       <Button type="primary" htmlType="submit">
         검색
