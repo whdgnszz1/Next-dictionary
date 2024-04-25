@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import { Button } from "antd";
 import { RcFile } from "antd/es/upload";
 
@@ -9,12 +8,12 @@ import Search from "@/app/ui/shared/search/search";
 import BulkUploadModal from "@/app/noun/_component/BulkUploadModal";
 import SingleUploadModal from "@/app/noun/_component/SingleUploadModal";
 
-interface HeaderProps {
+interface NounPageHeaderProps {
   fileList: RcFile[];
   updateFileList: (updateFn: (fileList: RcFile[]) => RcFile[]) => void;
 }
 
-function Header({ fileList, updateFileList }: HeaderProps) {
+function NounPageHeader({ fileList, updateFileList }: NounPageHeaderProps) {
   const [isBulkModalVisible, setIsBulkModalVisible] = useState(false);
   const [isSingleModalVisible, setIsSingleModalVisible] = useState(false);
 
@@ -39,7 +38,7 @@ function Header({ fileList, updateFileList }: HeaderProps) {
           isVisible={isBulkModalVisible}
           onOk={handleBulkModalOk}
           onCancel={handleBulkModalCancel}
-          fileList={fileList}
+          fileList={fileList || []}
           updateFileList={updateFileList}
           target="noun"
         />
@@ -53,4 +52,4 @@ function Header({ fileList, updateFileList }: HeaderProps) {
   );
 }
 
-export default Header;
+export default NounPageHeader;

@@ -10,7 +10,7 @@ import {
   DeleteNounDto,
   NounType,
 } from "@/lib/noun";
-import Header from "../ui/shared/header/header";
+import Header from "./_component/header";
 import { ColumnsType } from "antd/es/table";
 
 type NounPageProps = {
