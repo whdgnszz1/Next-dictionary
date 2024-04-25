@@ -19,9 +19,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <RQProvider>
-          <div className="flex flex-col justify-between h-screen px-[20px] pt-[40px] pb-[20px]">
+          <div className="flex flex-col justify-between h-dvh px-[20px] pt-[40px] pb-[20px]">
             <Navbar />
-            <div className="h-full">{children}</div>
+            <div className="h-full overflow-auto">{children}</div>
             <Footer />
           </div>
         </RQProvider>
