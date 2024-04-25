@@ -1,7 +1,8 @@
 import React from "react";
+import AnalyzePageHeader from "./_component/header";
 
-function Analyze() {
-  return <div>Analyze</div>;
+function AnalyzePage() {
+  return <AnalyzePageHeader />;
 }
 
-export default Analyze;
+export default AnalyzePage;
