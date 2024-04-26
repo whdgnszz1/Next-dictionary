@@ -6,8 +6,8 @@ import Navbar from "./ui/shared/navbar/navbar";
 import Footer from "./ui/shared/footer/footer";
 
 export const metadata: Metadata = {
-  title: "Dictionary App",
-  description: "Dictionary App",
+  title: "교보문고 ES 사전 관리 도구",
+  description: "교보문고 ES 사전 관리 도구",
 };
 
 export default function RootLayout({
