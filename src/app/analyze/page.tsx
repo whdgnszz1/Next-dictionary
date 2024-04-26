@@ -25,6 +25,20 @@ const columns: ColumnsType = [
     dataIndex: "morphemeAnalysis",
     key: "morphemeAnalysis",
     align: "center",
+    render: (text: string) => {
+      return (
+        <span>
+          {text.split(", ").map((part, index) => (
+            <span key={index}>
+              <b>{part.split(" : ")[0]}</b>
+              {" : "}
+              {part.split(" : ")[1]}
+              {index < text.split(", ").length - 1 ? ", " : ""}
+            </span>
+          ))}
+        </span>
+      );
+    },
   },
   {
     title: "유의어",
