@@ -38,13 +38,10 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
         `/nori_index/_analyze`,
         {
           method: "POST",
-          body: JSON.stringify({
+          body: {
             text: term,
             analyzer: "nori",
             explain: true,
-          }),
-          headers: {
-            "Content-Type": "application/json",
           },
         }
       );
@@ -77,7 +74,6 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
         if (existingKeyIndex === -1) {
           return [...prevResults, newResult];
         } else {
-          console.error("중복된 키가 발생했습니다:", newResult.key);
           return prevResults;
         }
       });
@@ -96,6 +92,7 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
     >
       <Input
         type="text"
+        allowClear
         placeholder={placeholder}
         value={term}
         onChange={handleInputChange}

@@ -103,6 +103,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       <div className="flex gap-2">
         <Input
           type="text"
+          allowClear
           placeholder="단어 입력"
           value={term}
           onChange={handleChange}

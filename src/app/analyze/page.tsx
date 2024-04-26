@@ -42,6 +42,7 @@ function AnalyzePage() {
       <AnalyzePageHeader onSearchResults={setSearchResults} />
       <div className="w-1/2">
         <Table
+          bordered
           columns={columns}
           dataSource={searchResults}
           pagination={false}

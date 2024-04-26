@@ -44,6 +44,7 @@ function Search({ placeholder }: Props) {
     >
       <Input
         type="text"
+        allowClear
         placeholder={placeholder}
         value={inputValue}
         onChange={handleInputChange}
