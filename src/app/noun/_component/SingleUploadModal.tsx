@@ -1,5 +1,6 @@
 "use client";
 
+import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import { useCreateNoun } from "@/lib/noun";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
@@ -95,9 +96,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <Button key="cancel" onClick={onCancel}>
           취소
         </Button>,
-        <Button key="submit" type="primary" onClick={handleSubmit}>
-          등록
-        </Button>,
+        <PrimaryButton text="등록" onClick={handleSubmit} />,
       ]}
     >
       <div className="flex gap-2">
@@ -109,7 +108,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
           onChange={handleChange}
           onPressEnter={handleKeyPress}
         />
-        <Button onClick={handleAnalysis}>분석</Button>
+        <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
       {error && <div className="text-red mt-[10px]">{error}</div>}
       {userDefinedTerms && (

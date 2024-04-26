@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button, Input } from "antd";
+import PrimaryButton from "../button/PrimaryButton";
 
 type Props = {
   placeholder: string;
@@ -50,9 +51,7 @@ function Search({ placeholder }: Props) {
         onChange={handleInputChange}
         onPressEnter={handleKeyPress}
       />
-      <Button type="primary" htmlType="submit">
-        검색
-      </Button>
+      <PrimaryButton text="검색" htmlType="submit" />
     </form>
   );
 }

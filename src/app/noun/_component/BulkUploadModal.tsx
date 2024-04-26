@@ -3,6 +3,7 @@ import { Modal, Button, Upload, UploadProps } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import { fetchAPI } from "@/shared/api/fetchApi";
 import { RcFile, UploadFile } from "antd/es/upload";
+import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 
 interface BulkUploadModalProps {
   isVisible: boolean;
@@ -73,9 +74,7 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         <Button key="back" onClick={onCancel}>
           취소
         </Button>,
-        <Button key="submit" type="primary" onClick={handleUpload}>
-          등록
-        </Button>,
+        <PrimaryButton text="등록" onClick={handleUpload} />,
       ]}
     >
       <Dragger {...uploadProps}>

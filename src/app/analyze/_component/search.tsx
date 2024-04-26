@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Button, Input } from "antd";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
+import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 
 export interface SearchResult {
   key: string;
@@ -100,9 +101,7 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
         onChange={handleInputChange}
         onPressEnter={handleAnalysis}
       />
-      <Button type="primary" htmlType="submit">
-        검색
-      </Button>
+      <PrimaryButton text="검색" htmlType="submit" />
     </form>
   );
 }

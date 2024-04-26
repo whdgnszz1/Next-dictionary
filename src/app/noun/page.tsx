@@ -12,6 +12,7 @@ import {
 } from "@/lib/noun";
 import Header from "./_component/header";
 import { ColumnsType } from "antd/es/table";
+import PrimaryButton from "../ui/shared/button/PrimaryButton";
 
 type NounPageProps = {
   searchParams: {
@@ -88,7 +89,7 @@ const NounPage = ({ searchParams }: NounPageProps) => {
       render: (_: any, record: NounType) => (
         <div className="flex gap-2 justify-center items-center">
           <Link href={`/noun/${record.id}`}>
-            <Button type="primary">수정</Button>
+            <PrimaryButton text="수정" />
           </Link>
           <Button onClick={() => handleDelete(record.id)} type="primary" danger>
             삭제
