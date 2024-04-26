@@ -77,6 +77,8 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
           return prevResults;
         }
       });
+
+      setTerm("");
     } catch (error) {
       console.error("분석 중 오류가 발생했습니다", error);
     }
