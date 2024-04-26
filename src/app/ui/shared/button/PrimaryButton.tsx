@@ -10,12 +10,7 @@ type Props = {
 
 function PrimaryButton({ text, htmlType, onClick }: Props) {
   return (
-    <Button
-      type="primary"
-      htmlType={htmlType}
-      className="bg-[#374484]"
-      onClick={onClick}
-    >
+    <Button type="primary" htmlType={htmlType} onClick={onClick}>
       {text}
     </Button>
   );
