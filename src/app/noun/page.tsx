@@ -102,6 +102,7 @@ const NounPage = ({ searchParams }: NounPageProps) => {
     <div className="mt-5 w-1/2">
       <Header fileList={fileList} updateFileList={setFileList} />
       <Table
+        bordered
         rowSelection={rowSelection}
         columns={columns}
         dataSource={nounList}

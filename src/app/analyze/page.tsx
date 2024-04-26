@@ -52,18 +52,16 @@ function AnalyzePage() {
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   return (
-    <>
+    <div className="mt-5 w-1/2">
       <AnalyzePageHeader onSearchResults={setSearchResults} />
-      <div className="w-1/2">
-        <Table
-          bordered
-          columns={columns}
-          dataSource={searchResults}
-          pagination={false}
-          rowKey="key"
-        />
-      </div>
-    </>
+      <Table
+        bordered
+        columns={columns}
+        dataSource={searchResults}
+        pagination={false}
+        rowKey="key"
+      />
+    </div>
   );
 }
 
