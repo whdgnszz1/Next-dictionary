@@ -5,9 +5,19 @@ import { Button, Input } from "antd";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 
+export interface SearchResult {
+  key: string;
+  text: string;
+  indexVocabulary: string;
+  morphemeAnalysis: string;
+  synonyms: string;
+}
+
 type Props = {
   placeholder: string;
-  onSearchResults: (results: any[]) => void;
+  onSearchResults: (
+    updateFunction: (prevResults: SearchResult[]) => SearchResult[]
+  ) => void;
 };
 
 function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
@@ -18,29 +28,61 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
   };
 
   const handleAnalysis = async () => {
+    if (term.trim() === "") {
+      console.log("검색어가 비어있습니다.");
+      return;
+    }
+
     try {
       const result: AnalyzeAPIResponse = await fetchElasticsearch(
         `/nori_index/_analyze`,
         {
           method: "POST",
-          body: {
+          body: JSON.stringify({
             text: term,
             analyzer: "nori",
             explain: true,
+          }),
+          headers: {
+            "Content-Type": "application/json",
           },
         }
       );
 
-      const tokens = result.detail.tokenizer.tokens.map((token) => ({
-        text: token.token,
-        start: token.start_offset,
-        end: token.end_offset,
-        type: token.type,
-      }));
-      onSearchResults(tokens);
+      const tokens = result.detail.tokenizer.tokens;
+
+      const definedTerms = tokens
+        .filter(
+          (token) => token.morphemes && token.morphemes.includes(token.token)
+        )
+        .map((token) => token.token)
+        .join(", ");
+
+      const morphemeAnalysis = tokens
+        .map((token) => `${token.token} : ${token.leftPOS.split("(")[0]}`)
+        .join(", ");
+
+      const newResult: SearchResult = {
+        key: tokens.map((t) => t.start_offset).join(","),
+        text: term,
+        indexVocabulary: definedTerms,
+        morphemeAnalysis: morphemeAnalysis,
+        synonyms: "",
+      };
+
+      onSearchResults((prevResults: SearchResult[]) => {
+        const existingKeyIndex = prevResults.findIndex(
+          (result) => result.key === newResult.key
+        );
+        if (existingKeyIndex === -1) {
+          return [...prevResults, newResult];
+        } else {
+          console.error("중복된 키가 발생했습니다:", newResult.key);
+          return prevResults;
+        }
+      });
     } catch (error) {
       console.error("분석 중 오류가 발생했습니다", error);
-      onSearchResults([]);
     }
   };
 

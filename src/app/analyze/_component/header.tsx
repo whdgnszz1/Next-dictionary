@@ -1,8 +1,10 @@
 import React from "react";
-import AnalyzeSearch from "./search";
+import AnalyzeSearch, { SearchResult } from "./search";
 
 type Props = {
-  onSearchResults: (results: any[]) => void;
+  onSearchResults: (
+    updateFunction: (prevResults: SearchResult[]) => SearchResult[]
+  ) => void;
 };
 
 function AnalyzePageHeader({ onSearchResults }: Props) {

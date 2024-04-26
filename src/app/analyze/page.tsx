@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import AnalyzePageHeader from "./_component/header";
 import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
+import { SearchResult } from "./_component/search";
 
 const columns: ColumnsType = [
   {
@@ -17,6 +18,7 @@ const columns: ColumnsType = [
     dataIndex: "indexVocabulary",
     key: "indexVocabulary",
     align: "center",
+    render: (text: string) => text || "-",
   },
   {
     title: "형태소 분석결과",
@@ -33,16 +35,17 @@ const columns: ColumnsType = [
 ];
 
 function AnalyzePage() {
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
 
   return (
     <>
       <AnalyzePageHeader onSearchResults={setSearchResults} />
-      <div className="">
+      <div className="w-1/2">
         <Table
           columns={columns}
           dataSource={searchResults}
           pagination={false}
+          rowKey="key"
         />
       </div>
     </>

@@ -123,7 +123,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <div>
           {analysisResult.detail.tokenizer.tokens.map((token, index) => (
             <div key={index}>
-              <pre>{`${token.token} : ${token.leftPOS}`}</pre>
+              <pre>{`${token.token} : ${token.leftPOS.split("(")[0]}`}</pre>
             </div>
           ))}
         </div>
