@@ -1,5 +1,6 @@
 "use client";
 
+import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import { useCreateNoun } from "@/lib/noun";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
@@ -100,14 +101,14 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       ]}
     >
       <div className="flex gap-2">
-        <Input
+        <CustomInput
           type="text"
-          allowClear
           placeholder="단어 입력"
           value={term}
           onChange={handleChange}
           onPressEnter={handleKeyPress}
         />
+
         <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
       {error && <div className="text-red mt-[10px]">{error}</div>}

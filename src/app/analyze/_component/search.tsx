@@ -5,6 +5,7 @@ import { Button, Input } from "antd";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
+import CustomInput from "@/app/ui/shared/Input/CustomInput";
 
 export interface SearchResult {
   key: string;
@@ -93,9 +94,8 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
       }}
       className="flex items-center gap-[10px] p-[10px]"
     >
-      <Input
+      <CustomInput
         type="text"
-        allowClear
         placeholder={placeholder}
         value={term}
         onChange={handleInputChange}

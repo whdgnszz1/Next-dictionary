@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button, Input } from "antd";
 import PrimaryButton from "../button/PrimaryButton";
+import CustomInput from "../Input/CustomInput";
 
 type Props = {
   placeholder: string;
@@ -43,9 +44,8 @@ function Search({ placeholder }: Props) {
       onSubmit={handleSubmit}
       className="flex items-center gap-[10px] p-[10px]"
     >
-      <Input
+      <CustomInput
         type="text"
-        allowClear
         placeholder={placeholder}
         value={inputValue}
         onChange={handleInputChange}
