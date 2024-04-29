@@ -1,5 +1,5 @@
 export type SynonymType = {
-  id: number;
+  srchSynId: number;
   content: string;
   isOneWay: string;
   createdAt: string;

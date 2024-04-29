@@ -7,32 +7,96 @@ import Link from "next/link";
 
 import { useGetSynonymList } from "@/lib/synonym/hooks/useGetSynonymList";
 import { useDeleteSynonym } from "@/lib/synonym/hooks/useDeleteSynonym";
-import { DeleteSynonymDto } from "@/lib/synonym";
+import { SynonymType } from "@/lib/synonym";
+import { ColumnsType } from "antd/es/table";
+import { Modal } from "antd";
+import { useState } from "react";
+import { RcFile } from "antd/es/upload";
 
-const SynonymPage = () => {
-  const { data } = useGetSynonymList();
-  const synonymList = data?.data;
-  const count = synonymList?.length ?? 0;
+type SynonymPageProps = {
+  searchParams: {
+    q?: string;
+    page?: string;
+  };
+};
+
+const SynonymPage = ({ searchParams }: SynonymPageProps) => {
+  const [fileList, setFileList] = useState<RcFile[]>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+
+  const q = searchParams?.q || "";
+  const page = searchParams?.page || "1";
+
+  const { data, isLoading } = useGetSynonymList({
+    q,
+    page: parseInt(page),
+  });
+  const nounList = data?.data.items;
+  const totalCount = data?.data.totalCount ?? 0;
 
   const deleteMutation = useDeleteSynonym({
     onSuccess: () => {
-      console.log("동의어 사전이 성공적으로 삭제되었습니다.");
+      console.log("사용자 사전이 성공적으로 삭제되었습니다.");
     },
     onError: (error: unknown) => {
-      console.error("Error deleting synonym:", error);
+      console.error("Error deleting noun:", error);
     },
   });
 
-  const handleDelete = (synonymId: number) => {
-    if (confirm("정말로 삭제하시겠습니까?")) {
-      if (synonymId !== null) {
-        const deleteSynonymDto: DeleteSynonymDto = {
-          id: synonymId,
-        };
-        deleteMutation.mutate(deleteSynonymDto);
-      }
-    }
+  const handleDelete = (nounId: number) => {
+    Modal.confirm({
+      title: "정말로 삭제하시겠습니까?",
+      okText: "예",
+      okType: "danger",
+      cancelText: "아니오",
+      onOk() {
+        const deleteNounDto: DeleteNounDto = { id: nounId };
+        deleteMutation.mutate(deleteNounDto);
+      },
+    });
   };
+  const onSelectionChange = (selectedKeys: React.Key[]) => {
+    setSelectedRowKeys(selectedKeys);
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectionChange,
+  };
+
+  const columns: ColumnsType<SynonymType> = [
+    {
+      title: "키워드",
+      dataIndex: "term",
+      key: "term",
+      sorter: (a: SynonymType, b: SynonymType) => a.term.localeCompare(b.term),
+      align: "center",
+    },
+    {
+      title: "수정일",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: (a: SynonymType, b: SynonymType) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      render: (text: string) => text?.toString().slice(4, 16),
+      align: "center",
+    },
+    {
+      title: "관리",
+      key: "action",
+      align: "center",
+      render: (_: any, record: NounType) => (
+        <div className="flex gap-2 justify-center items-center">
+          <Link href={`/noun/${record.id}`}>
+            <PrimaryButton text="수정" />
+          </Link>
+          <Button onClick={() => handleDelete(record.id)} type="primary" danger>
+            삭제
+          </Button>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className={styles.container}>
