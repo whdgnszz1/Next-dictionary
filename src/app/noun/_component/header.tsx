@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "antd";
 import { RcFile } from "antd/es/upload";
 
 import Search from "@/app/ui/shared/search/search";
