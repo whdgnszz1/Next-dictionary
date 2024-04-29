@@ -125,7 +125,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <Button key="cancel" onClick={onCancelHandler}>
           취소
         </Button>,
-        <PrimaryButton text="등록" onClick={handleSubmit} />,
+        <PrimaryButton key="submit" text="등록" onClick={handleSubmit} />,
       ]}
     >
       <div className="flex gap-2">
