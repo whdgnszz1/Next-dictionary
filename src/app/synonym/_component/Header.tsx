@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { RcFile } from "antd/es/upload";
 
 import Search from "@/app/ui/shared/search/search";
-import BulkUploadModal from "@/app/noun/_component/BulkUploadModal";
-import SingleUploadModal from "@/app/noun/_component/SingleUploadModal";
+import BulkUploadModal from "@/app/synonym/_component/BulkUploadModal";
+import SingleUploadModal from "@/app/synonym/_component/SingleUploadModal";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 
 interface SynonymPageHeaderProps {

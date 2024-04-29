@@ -2,10 +2,10 @@
 
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
-import { useCreateNoun } from "@/lib/noun";
+import { useCreateSynonym } from "@/lib/synonym";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
-import { Button, Modal } from "antd";
+import { Button, Modal, Radio, RadioChangeEvent } from "antd";
 import { useState } from "react";
 
 interface SingleUploadModalProps {
@@ -19,15 +19,20 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   onOk,
   onCancel,
 }) => {
-  const [term, setTerm] = useState<string>("");
+  const [srchSynKeyword, setSrchSynKeyword] = useState<string>("");
+  const [srchSynTerm, setSrchSynTerm] = useState<string>("");
+  const [srchSynOneWayYsno, setSrchSynOneWayYsno] = useState<string>("Y");
+
   const [error, setError] = useState<string>("");
   const [analysisResult, setAnalysisResult] = useState<AnalyzeAPIResponse>();
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
 
-  const { mutate: createNoun } = useCreateNoun({
+  const { mutate: createSynonym } = useCreateSynonym({
     onSuccess: () => {
       console.log("단어가 성공적으로 추가되었습니다.");
-      setTerm("");
+      setSrchSynKeyword("");
+      setSrchSynTerm("");
+      setSrchSynOneWayYsno("Y");
       onOk();
     },
     onError: (error) => {
@@ -36,8 +41,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   });
 
   const handleSubmit = () => {
-    if (term) {
-      createNoun({ term });
+    if (srchSynKeyword && srchSynTerm) {
+      createSynonym({ srchSynKeyword, srchSynTerm, srchSynOneWayYsno });
     } else {
       setError("단어를 입력해주세요.");
     }
@@ -50,8 +55,25 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     }
   };
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
+    const { value } = e.target;
+    if (field === "keyword") {
+      setSrchSynKeyword(value);
+    } else if (field === "term") {
+      setSrchSynTerm(value);
+    }
+    setError("");
+  };
+
+  const handleChangeDirection = (e: RadioChangeEvent) => {
+    setSrchSynOneWayYsno(e.target.value);
+  };
+
   const handleAnalysis = async () => {
-    if (!term) {
+    if (!srchSynKeyword) {
       setError("단어를 입력해주세요.");
       return;
     }
@@ -62,7 +84,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         {
           method: "POST",
           body: {
-            text: term,
+            text: srchSynKeyword,
             analyzer: "nori",
             explain: true,
           },
@@ -83,15 +105,10 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTerm(e.target.value);
-    setError("");
-  };
-
   return (
     <Modal
       className="min-h-[500px]"
-      title="사용자 사전 등록"
+      title="유의어 사전 등록"
       open={isVisible}
       onCancel={onCancel}
       footer={[
@@ -104,15 +121,31 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       <div className="flex gap-2">
         <CustomInput
           type="text"
-          placeholder="단어 입력"
-          value={term}
-          onChange={handleChange}
+          placeholder="키워드 입력"
+          value={srchSynKeyword}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            handleChange(e, "keyword")
+          }
           onPressEnter={handleKeyPress}
         />
-
         <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
       {error && <div className="text-red mt-[10px]">{error}</div>}
+      <div className="flex gap-2 py-2">
+        <Radio.Group onChange={handleChangeDirection} value={srchSynOneWayYsno}>
+          <Radio value="Y">단방향</Radio>
+          <Radio value="N">양방향</Radio>
+        </Radio.Group>
+      </div>
+      <CustomInput
+        type="text"
+        placeholder="유의어 입력"
+        value={srchSynTerm}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          handleChange(e, "term")
+        }
+      />
+
       {userDefinedTerms && (
         <div>
           <p className="font-bold pt-4 pb-2">색인 어휘 추출 결과:</p>
