@@ -1,4 +1,5 @@
 import { NounType } from "@/lib/noun";
+import { SynonymType } from "@/lib/synonym";
 
 export type ApiResponse<T> = {
   data: T;
@@ -9,5 +10,10 @@ export type ApiResponse<T> = {
 
 export type NounListResponse = {
   items: NounType[];
+  totalCount: number;
+};
+
+export type SynonymListResponse = {
+  items: SynonymType[];
   totalCount: number;
 };
