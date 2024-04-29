@@ -1,5 +1,5 @@
 import { ApiResponse } from "@/shared/types/api-response";
-import { StopType, CreateStopDto, UpdateStopDto, DeleteStopDto } from "./types";
+import { StopType, CreateStopDto, DeleteStopDto } from "./types";
 import { fetchAPI } from "@/shared/api/fetchApi";
 
 export async function getStopList(): Promise<ApiResponse<StopType[]>> {
@@ -16,15 +16,6 @@ export async function createStop(
   return await fetchAPI<ApiResponse<any>>("/stop", {
     method: "POST",
     body: createStopDto,
-  });
-}
-
-export async function updateStop(
-  updateStopDto: UpdateStopDto
-): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>(`/stop`, {
-    method: "PUT",
-    body: updateStopDto,
   });
 }
 

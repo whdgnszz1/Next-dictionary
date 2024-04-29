@@ -1,19 +1,15 @@
 export type SynonymType = {
   srchSynId: number;
-  content: string;
-  isOneWay: string;
-  createdAt: string;
+  srchSynKeyword: string;
+  srchSynTerm: string;
+  srchSynOneWayYsno: string;
+  createdAt?: string;
 };
 
 export type CreateSynonymDto = {
-  content: string;
-  isOneWay: string;
-};
-
-export type UpdateSynonymDto = {
-  id: number;
-  content: string;
-  isOneWay: string;
+  srchSynKeyword: string;
+  srchSynTerm: string;
+  srchSynOneWayYsno: string;
 };
 
 export type DeleteSynonymDto = {

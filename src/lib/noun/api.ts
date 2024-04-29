@@ -1,5 +1,5 @@
 import { ApiResponse, NounListResponse } from "@/shared/types/api-response";
-import { CreateNounDto, NounType, UpdateNounDto, DeleteNounDto } from "./types";
+import { CreateNounDto, NounType, DeleteNounDto } from "./types";
 import { fetchAPI } from "@/shared/api/fetchApi";
 
 export async function getNounList(
@@ -31,15 +31,6 @@ export async function createNoun(
   return await fetchAPI<ApiResponse<any>>("/noun", {
     method: "POST",
     body: createNounDto,
-  });
-}
-
-export async function updateNoun(
-  updateNounDto: UpdateNounDto
-): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>(`/noun`, {
-    method: "PUT",
-    body: updateNounDto,
   });
 }
 
