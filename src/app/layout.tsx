@@ -7,8 +7,8 @@ import Footer from "./ui/shared/footer/footer";
 import { ConfigProvider, theme } from "antd";
 
 export const metadata: Metadata = {
-  title: "교보문고 ES 사전 관리 도구",
-  description: "교보문고 ES 사전 관리 도구",
+  title: "교보문고 | ES 사전 관리 도구",
+  description: "교보문고 | ES 사전 관리 도구",
 };
 
 const globalTheme = {

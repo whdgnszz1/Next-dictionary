@@ -90,6 +90,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   return (
     <Modal
+      className="min-h-[500px]"
       title="사용자 사전 등록"
       open={isVisible}
       onCancel={onCancel}
@@ -119,15 +120,18 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         </div>
       )}
 
-      <p className="font-bold pt-4 pb-2">형태소 분석 결과:</p>
       {analysisResult && (
-        <div>
-          {analysisResult.detail.tokenizer.tokens.map((token, index) => (
-            <div key={index}>
-              <pre>{`${token.token} : ${token.leftPOS.split("(")[0]}`}</pre>
-            </div>
-          ))}
-        </div>
+        <>
+          <p className="font-bold pt-4 pb-2">형태소 분석 결과:</p>
+
+          <div>
+            {analysisResult.detail.tokenizer.tokens.map((token, index) => (
+              <div key={index}>
+                <pre>{`${token.token} : ${token.leftPOS.split("(")[0]}`}</pre>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </Modal>
   );
