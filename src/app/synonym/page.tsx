@@ -1,17 +1,13 @@
 "use client";
 
-import Search from "@/app/ui/shared/search/search";
-import Pagination from "@/app/ui/shared/pagination/pagination";
-import styles from "@/app/ui/synonym/synonym.module.css";
-import Link from "next/link";
-
 import { useGetSynonymList } from "@/lib/synonym/hooks/useGetSynonymList";
 import { useDeleteSynonym } from "@/lib/synonym/hooks/useDeleteSynonym";
-import { SynonymType } from "@/lib/synonym";
-import { ColumnsType } from "antd/es/table";
-import { Modal } from "antd";
+import { DeleteSynonymDto, SynonymType } from "@/lib/synonym";
+import Table, { ColumnsType } from "antd/es/table";
+import { Button, Modal } from "antd";
 import { useState } from "react";
 import { RcFile } from "antd/es/upload";
+import SynonymPageHeader from "./_component/Header";
 
 type SynonymPageProps = {
   searchParams: {
@@ -31,7 +27,7 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
     q,
     page: parseInt(page),
   });
-  const nounList = data?.data.items;
+  const synonymList = data?.data.items;
   const totalCount = data?.data.totalCount ?? 0;
 
   const deleteMutation = useDeleteSynonym({
@@ -43,14 +39,13 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
     },
   });
 
-  const handleDelete = (nounId: number) => {
+  const handleDelete = (synonymId: number) => {
     Modal.confirm({
       title: "정말로 삭제하시겠습니까?",
       okText: "예",
-      okType: "danger",
       cancelText: "아니오",
       onOk() {
-        const deleteNounDto: DeleteNounDto = { id: nounId };
+        const deleteNounDto: DeleteSynonymDto = { id: synonymId };
         deleteMutation.mutate(deleteNounDto);
       },
     });
@@ -67,17 +62,22 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
   const columns: ColumnsType<SynonymType> = [
     {
       title: "키워드",
-      dataIndex: "term",
-      key: "term",
-      sorter: (a: SynonymType, b: SynonymType) => a.term.localeCompare(b.term),
+      dataIndex: "srchSynKeyword",
+      key: "srchSynKeyword",
       align: "center",
     },
     {
-      title: "수정일",
+      title: "유의어",
+      dataIndex: "srchSynTerm",
+      key: "srchSynTerm",
+      align: "center",
+    },
+    {
+      title: "생성일",
       dataIndex: "createdAt",
       key: "createdAt",
       sorter: (a: SynonymType, b: SynonymType) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        new Date(a.cretDttm).getTime() - new Date(b.cretDttm).getTime(),
       render: (text: string) => text?.toString().slice(4, 16),
       align: "center",
     },
@@ -85,12 +85,13 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
       title: "관리",
       key: "action",
       align: "center",
-      render: (_: any, record: NounType) => (
+      render: (_: any, record: SynonymType) => (
         <div className="flex gap-2 justify-center items-center">
-          <Link href={`/noun/${record.id}`}>
-            <PrimaryButton text="수정" />
-          </Link>
-          <Button onClick={() => handleDelete(record.id)} type="primary" danger>
+          <Button
+            onClick={() => handleDelete(record.srchSynId)}
+            type="primary"
+            danger
+          >
             삭제
           </Button>
         </div>
@@ -99,55 +100,21 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
   ];
 
   return (
-    <div className={styles.container}>
-      <div className={styles.top}>
-        <Search placeholder="키워드 검색" />
-        <Link href="/synonym/add">
-          <button className={styles.addButton}>추가하기</button>
-        </Link>
-      </div>
-      {synonymList && synonymList.length > 0 && (
-        <>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <td className={styles.keywordColumn}>키워드</td>
-                <td className={styles.applyColumn}>단방향 / 양방향</td>
-                <td className={styles.dateColumn}>수정일</td>
-                <td className={styles.managementColumn}>관리</td>
-              </tr>
-            </thead>
-            <tbody>
-              {synonymList.map((synonym) => (
-                <tr key={synonym.id}>
-                  <td>
-                    <div>{synonym.content}</div>
-                  </td>
-                  <td>{synonym.isOneWay === "1" ? "단방향" : "양방향"}</td>
-                  <td>{synonym.createdAt?.toString().slice(4, 16)}</td>
-                  <td>
-                    <div className={styles.buttons}>
-                      <Link href={`/synonym/${synonym.id}`}>
-                        <button className={`${styles.button} ${styles.view}`}>
-                          수정
-                        </button>
-                      </Link>
-                      <button
-                        type="button"
-                        className={`${styles.button} ${styles.delete}`}
-                        onClick={() => handleDelete(synonym.id)}
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Pagination count={count} />
-        </>
-      )}
+    <div className="mt-5 w-1/2">
+      <SynonymPageHeader fileList={fileList} updateFileList={setFileList} />
+      <Table
+        bordered
+        rowSelection={rowSelection}
+        columns={columns}
+        dataSource={synonymList}
+        rowKey="id"
+        loading={isLoading}
+        pagination={{
+          total: totalCount,
+          pageSize: 10,
+          current: parseInt(page),
+        }}
+      />
     </div>
   );
 };

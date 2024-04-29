@@ -3,7 +3,7 @@ export type SynonymType = {
   srchSynKeyword: string;
   srchSynTerm: string;
   srchSynOneWayYsno: string;
-  createdAt?: string;
+  cretDttm: string;
 };
 
 export type CreateSynonymDto = {

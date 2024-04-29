@@ -52,7 +52,7 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
     formData.append("target", target);
 
     try {
-      await fetchAPI("/bulk-synonym", {
+      await fetchAPI(`/bulk-${target}`, {
         method: "POST",
         body: formData,
       });

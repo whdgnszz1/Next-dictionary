@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button } from "antd";
 import { RcFile } from "antd/es/upload";
 
 import Search from "@/app/ui/shared/search/search";
@@ -33,14 +32,14 @@ function SynonymPageHeader({
       <Search placeholder="키워드 검색" />
       <div className="flex gap-2">
         <PrimaryButton text="추가" onClick={showSingleModal} />
-        <PrimaryButton text="일괄 동의어 사전 등록" onClick={showBulkModal} />
+        <PrimaryButton text="일괄 유의어 사전 등록" onClick={showBulkModal} />
         <BulkUploadModal
           isVisible={isBulkModalVisible}
           onOk={handleBulkModalOk}
           onCancel={handleBulkModalCancel}
           fileList={fileList || []}
           updateFileList={updateFileList}
-          target="noun"
+          target="synonym"
         />
         <SingleUploadModal
           isVisible={isSingleModalVisible}
