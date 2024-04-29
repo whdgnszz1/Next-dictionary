@@ -35,6 +35,14 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     },
   });
 
+  const onCancelHandler = () => {
+    setTerm("");
+    setError("");
+    setAnalysisResult(undefined);
+    setUserDefinedTerms("");
+    onCancel();
+  };
+
   const handleSubmit = () => {
     if (term) {
       createNoun({ term });
@@ -93,9 +101,9 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       className="min-h-[500px]"
       title="사용자 사전 등록"
       open={isVisible}
-      onCancel={onCancel}
+      onCancel={onCancelHandler}
       footer={[
-        <Button key="cancel" onClick={onCancel}>
+        <Button key="cancel" onClick={onCancelHandler}>
           취소
         </Button>,
         <PrimaryButton text="등록" onClick={handleSubmit} />,

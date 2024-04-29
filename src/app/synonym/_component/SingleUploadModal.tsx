@@ -72,6 +72,16 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     setSrchSynOneWayYsno(e.target.value);
   };
 
+  const onCancelHandler = () => {
+    setSrchSynKeyword("");
+    setSrchSynTerm("");
+    setSrchSynOneWayYsno("Y");
+    setError("");
+    setAnalysisResult(undefined);
+    setUserDefinedTerms("");
+    onCancel();
+  };
+
   const handleAnalysis = async () => {
     if (!srchSynKeyword) {
       setError("단어를 입력해주세요.");
@@ -110,9 +120,9 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       className="min-h-[500px]"
       title="유의어 사전 등록"
       open={isVisible}
-      onCancel={onCancel}
+      onCancel={onCancelHandler}
       footer={[
-        <Button key="cancel" onClick={onCancel}>
+        <Button key="cancel" onClick={onCancelHandler}>
           취소
         </Button>,
         <PrimaryButton text="등록" onClick={handleSubmit} />,

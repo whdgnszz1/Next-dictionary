@@ -24,6 +24,11 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
 }) => {
   const { Dragger } = Upload;
 
+  const onCancelHandler = () => {
+    updateFileList(() => []);
+    onCancel();
+  };
+
   const uploadProps: UploadProps = {
     onRemove: (file: UploadFile) => {
       updateFileList((prevList) => prevList.filter((f) => f.uid !== file.uid));
@@ -69,7 +74,7 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
       title="일괄 사전 등록"
       open={isVisible}
       onOk={handleUpload}
-      onCancel={onCancel}
+      onCancel={onCancelHandler}
       footer={[
         <Button key="back" onClick={onCancel}>
           취소
