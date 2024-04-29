@@ -76,10 +76,10 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
       onOk={handleUpload}
       onCancel={onCancelHandler}
       footer={[
-        <Button key="back" onClick={onCancel}>
+        <Button key="cancel" onClick={onCancel}>
           취소
         </Button>,
-        <PrimaryButton text="등록" onClick={handleUpload} />,
+        <PrimaryButton text="등록" key="submit" onClick={handleUpload} />,
       ]}
     >
       <Dragger {...uploadProps}>
