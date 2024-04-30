@@ -8,6 +8,7 @@ import { Button, Modal } from "antd";
 import { useState } from "react";
 import { RcFile } from "antd/es/upload";
 import SynonymPageHeader from "./_component/Header";
+import { compareDates } from "@/shared/utils";
 
 type SynonymPageProps = {
   searchParams: {
@@ -74,11 +75,20 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
     },
     {
       title: "생성일",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      dataIndex: "cretDttm",
+      key: "cretDttm",
       sorter: (a: SynonymType, b: SynonymType) =>
-        new Date(a.cretDttm).getTime() - new Date(b.cretDttm).getTime(),
-      render: (text: string) => text?.toString().slice(4, 16),
+        compareDates(a.cretDttm, b.cretDttm),
+      render: (cretDttm: string) => cretDttm?.split("T")[0],
+      align: "center",
+    },
+    {
+      title: "수정일",
+      dataIndex: "amndDttm",
+      key: "amndDttm",
+      sorter: (a: SynonymType, b: SynonymType) =>
+        compareDates(a.amndDttm, b.amndDttm),
+      render: (amndDttm: string) => amndDttm?.split("T")[0],
       align: "center",
     },
     {
@@ -100,7 +110,7 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
   ];
 
   return (
-    <div className="mt-5 w-1/2">
+    <div className="mt-5 w-1/2 min-w-[1000px]">
       <SynonymPageHeader fileList={fileList} updateFileList={setFileList} />
       <Table
         bordered

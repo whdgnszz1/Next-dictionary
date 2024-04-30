@@ -4,6 +4,7 @@ export type SynonymType = {
   srchSynTerm: string;
   srchSynOneWayYsno: string;
   cretDttm: string;
+  amndDttm: string;
 };
 
 export type CreateSynonymDto = {

@@ -11,6 +11,7 @@ import {
 } from "@/lib/noun";
 import Header from "./_component/Header";
 import { ColumnsType } from "antd/es/table";
+import { compareDates } from "@/shared/utils";
 
 type NounPageProps = {
   searchParams: {
@@ -77,8 +78,8 @@ const NounPage = ({ searchParams }: NounPageProps) => {
       dataIndex: "cretDttm",
       key: "cretDttm",
       sorter: (a: NounType, b: NounType) =>
-        new Date(a.cretDttm).getTime() - new Date(b.cretDttm).getTime(),
-      render: (text: string) => text.split("T")[0],
+        compareDates(a.cretDttm, b.cretDttm),
+      render: (cretDttm: string) => cretDttm?.split("T")[0],
       align: "center",
     },
     {
