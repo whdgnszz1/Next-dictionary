@@ -1,6 +1,6 @@
 "use client";
 
-import Search from "@/app/ui/shared/search/search";
+import Search from "@/app/ui/shared/search/Search";
 import Pagination from "@/app/ui/shared/pagination/pagination";
 import styles from "@/app/ui/stop/stop.module.css";
 import Link from "next/link";

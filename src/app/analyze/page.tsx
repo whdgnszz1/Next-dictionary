@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import AnalyzePageHeader from "./_component/header";
+import AnalyzePageHeader from "./_component/Header";
 import { Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { SearchResult } from "./_component/search";
+import { SearchResult } from "./_component/Search";
 
 const columns: ColumnsType = [
   {

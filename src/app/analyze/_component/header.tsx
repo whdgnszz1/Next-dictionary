@@ -1,5 +1,5 @@
 import React from "react";
-import AnalyzeSearch, { SearchResult } from "./search";
+import AnalyzeSearch, { SearchResult } from "./Search";
 
 type Props = {
   onSearchResults: (
