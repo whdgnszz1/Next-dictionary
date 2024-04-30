@@ -11,7 +11,7 @@ export async function getNounList(
   if (params.page) queryParams.append("page", params.page.toString());
   const size = params.size && params.size > 0 ? params.size : 10;
   queryParams.append("size", size.toString());
-  queryParams.append("fieldName", "term");
+  queryParams.append("fieldName", "srchNoun");
 
   return fetchAPI<ApiResponse<NounListResponse>>(
     "/nouns?" + queryParams.toString(),

@@ -100,14 +100,18 @@ const NounPage = ({ searchParams }: NounPageProps) => {
   ];
 
   return (
-    <div className="mt-5 w-1/2">
-      <Header fileList={fileList} updateFileList={setFileList} />
+    <div className="mt-5 w-1/2 min-w-[1000px]">
+      <Header
+        fileList={fileList}
+        updateFileList={setFileList}
+        totalCount={totalCount}
+      />
       <Table
         bordered
         rowSelection={rowSelection}
         columns={columns}
         dataSource={nounList}
-        rowKey="id"
+        rowKey="srchNounId"
         loading={isLoading}
         pagination={{
           total: totalCount,

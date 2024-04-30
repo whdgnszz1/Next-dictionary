@@ -21,29 +21,27 @@ function Navbar() {
   };
 
   return (
-    <div>
-      <div
-        className={`flex items-center text-black h-[48px] border-b-[2px] border-black`}
-      >
-        <Image
-          src="/nav_logo.png"
-          alt="Navigation Logo"
-          width={120}
-          height={40}
-        />
-        {menuItems.map((item) => (
-          <div
-            key={item.title}
-            className={getMenuItemClass({
-              path: item.path,
-              currentPath: pathname,
-            })}
-            onClick={() => navigateTo(item.path)}
-          >
-            {item.title}
-          </div>
-        ))}
-      </div>
+    <div
+      className={`flex min-w-[1000px] items-center text-black h-[48px] border-b-[2px] border-black`}
+    >
+      <Image
+        src="/nav_logo.png"
+        alt="Navigation Logo"
+        width={120}
+        height={40}
+      />
+      {menuItems.map((item) => (
+        <div
+          key={item.title}
+          className={getMenuItemClass({
+            path: item.path,
+            currentPath: pathname,
+          })}
+          onClick={() => navigateTo(item.path)}
+        >
+          {item.title}
+        </div>
+      ))}
     </div>
   );
 }
