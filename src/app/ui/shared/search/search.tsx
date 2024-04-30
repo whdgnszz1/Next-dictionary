@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Button, Input } from "antd";
 import PrimaryButton from "../button/PrimaryButton";
 import CustomInput from "../Input/CustomInput";
 

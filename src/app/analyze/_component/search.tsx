@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Input } from "antd";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
