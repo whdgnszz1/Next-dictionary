@@ -5,7 +5,7 @@ import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import { useCreateNoun } from "@/lib/noun";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
-import { Button, Input, Modal } from "antd";
+import { Button, Modal } from "antd";
 import { useState } from "react";
 
 interface SingleUploadModalProps {
@@ -19,7 +19,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   onOk,
   onCancel,
 }) => {
-  const [term, setTerm] = useState<string>("");
+  const [srchNoun, setSrchNoun] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [analysisResult, setAnalysisResult] = useState<AnalyzeAPIResponse>();
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
@@ -27,7 +27,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
       console.log("단어가 성공적으로 추가되었습니다.");
-      setTerm("");
+      setSrchNoun("");
       onOk();
     },
     onError: (error) => {
@@ -36,7 +36,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   });
 
   const onCancelHandler = () => {
-    setTerm("");
+    setSrchNoun("");
     setError("");
     setAnalysisResult(undefined);
     setUserDefinedTerms("");
@@ -44,8 +44,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   };
 
   const handleSubmit = () => {
-    if (term) {
-      createNoun({ term });
+    if (srchNoun) {
+      createNoun({ srchNoun });
     } else {
       setError("단어를 입력해주세요.");
     }
@@ -59,7 +59,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   };
 
   const handleAnalysis = async () => {
-    if (!term) {
+    if (!srchNoun) {
       setError("단어를 입력해주세요.");
       return;
     }
@@ -70,7 +70,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         {
           method: "POST",
           body: {
-            text: term,
+            text: srchNoun,
             analyzer: "nori",
             explain: true,
           },
@@ -92,7 +92,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTerm(e.target.value);
+    setSrchNoun(e.target.value);
     setError("");
   };
 
@@ -113,7 +113,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <CustomInput
           type="text"
           placeholder="단어 입력"
-          value={term}
+          value={srchNoun}
           onChange={handleChange}
           onPressEnter={handleKeyPress}
         />

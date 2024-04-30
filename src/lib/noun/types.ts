@@ -1,13 +1,13 @@
 export type NounType = {
-  id: number;
-  term: string;
-  createdAt: string;
+  srchNounId: number;
+  srchNoun: string;
+  cretDttm: string;
 };
 
 export type CreateNounDto = {
-  term: string;
+  srchNoun: string;
 };
 
 export type DeleteNounDto = {
-  id: number;
+  srchNounId: number;
 };

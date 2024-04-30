@@ -9,7 +9,7 @@ import {
   DeleteNounDto,
   NounType,
 } from "@/lib/noun";
-import Header from "./_component/header";
+import Header from "./_component/Header";
 import { ColumnsType } from "antd/es/table";
 
 type NounPageProps = {
@@ -42,14 +42,14 @@ const NounPage = ({ searchParams }: NounPageProps) => {
     },
   });
 
-  const handleDelete = (nounId: number) => {
+  const handleDelete = (srchNounId: number) => {
     Modal.confirm({
       title: "정말로 삭제하시겠습니까?",
       okText: "예",
       okType: "danger",
       cancelText: "아니오",
       onOk() {
-        const deleteNounDto: DeleteNounDto = { id: nounId };
+        const deleteNounDto: DeleteNounDto = { srchNounId };
         deleteMutation.mutate(deleteNounDto);
       },
     });
@@ -68,15 +68,16 @@ const NounPage = ({ searchParams }: NounPageProps) => {
       title: "키워드",
       dataIndex: "term",
       key: "term",
-      sorter: (a: NounType, b: NounType) => a.term.localeCompare(b.term),
+      sorter: (a: NounType, b: NounType) =>
+        a.srchNoun.localeCompare(b.srchNoun),
       align: "center",
     },
     {
       title: "생성일",
-      dataIndex: "createdAt",
-      key: "createdAt",
+      dataIndex: "cretDttm",
+      key: "cretDttm",
       sorter: (a: NounType, b: NounType) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+        new Date(a.cretDttm).getTime() - new Date(b.cretDttm).getTime(),
       render: (text: string) => text?.toString().slice(4, 16),
       align: "center",
     },
@@ -86,7 +87,11 @@ const NounPage = ({ searchParams }: NounPageProps) => {
       align: "center",
       render: (_: any, record: NounType) => (
         <div className="flex gap-2 justify-center items-center">
-          <Button onClick={() => handleDelete(record.id)} type="primary" danger>
+          <Button
+            onClick={() => handleDelete(record.srchNounId)}
+            type="primary"
+            danger
+          >
             삭제
           </Button>
         </div>

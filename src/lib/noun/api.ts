@@ -21,8 +21,12 @@ export async function getNounList(
   );
 }
 
-export async function getNoun(nounId: number): Promise<ApiResponse<NounType>> {
-  return fetchAPI<ApiResponse<NounType>>(`/noun/${nounId}`, { method: "GET" });
+export async function getNoun(
+  srchNounId: number
+): Promise<ApiResponse<NounType>> {
+  return fetchAPI<ApiResponse<NounType>>(`/noun/${srchNounId}`, {
+    method: "GET",
+  });
 }
 
 export async function createNoun(
@@ -37,7 +41,7 @@ export async function createNoun(
 export async function deleteNoun(
   deleteNounDto: DeleteNounDto
 ): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>(`/noun/${deleteNounDto.id}`, {
+  return await fetchAPI<ApiResponse<any>>(`/noun/${deleteNounDto.srchNounId}`, {
     method: "DELETE",
   });
 }
