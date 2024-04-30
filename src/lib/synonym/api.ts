@@ -11,7 +11,7 @@ export async function getSynonymList(
   if (params.page) queryParams.append("page", params.page.toString());
   const size = params.size && params.size > 0 ? params.size : 10;
   queryParams.append("size", size.toString());
-  queryParams.append("fieldName", "term");
+  queryParams.append("fieldName", "srchSynKeyword");
 
   return fetchAPI<ApiResponse<SynonymListResponse>>(
     "/synonyms?" + queryParams.toString(),
@@ -22,9 +22,9 @@ export async function getSynonymList(
 }
 
 export async function getSynonym(
-  nounId: number
+  srchSynId: number
 ): Promise<ApiResponse<SynonymType>> {
-  return fetchAPI<ApiResponse<SynonymType>>(`/synonym/${nounId}`, {
+  return fetchAPI<ApiResponse<SynonymType>>(`/synonym/${srchSynId}`, {
     method: "GET",
   });
 }
@@ -41,7 +41,10 @@ export async function createSynonym(
 export async function deleteSynonym(
   deleteSynonymDto: DeleteSynonymDto
 ): Promise<ApiResponse<any>> {
-  return await fetchAPI<ApiResponse<any>>(`/synonym/${deleteSynonymDto.id}`, {
-    method: "DELETE",
-  });
+  return await fetchAPI<ApiResponse<any>>(
+    `/synonym/${deleteSynonymDto.srchSynId}`,
+    {
+      method: "DELETE",
+    }
+  );
 }
