@@ -33,24 +33,25 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
 
   const deleteMutation = useDeleteSynonym({
     onSuccess: () => {
-      console.log("사용자 사전이 성공적으로 삭제되었습니다.");
+      console.log("유의어 사전이 성공적으로 삭제되었습니다.");
     },
     onError: (error: unknown) => {
-      console.error("Error deleting noun:", error);
+      console.error("Error deleting synonym:", error);
     },
   });
 
-  const handleDelete = (synonymId: number) => {
+  const handleDelete = (srchSynId: number) => {
     Modal.confirm({
       title: "정말로 삭제하시겠습니까?",
       okText: "예",
       cancelText: "아니오",
       onOk() {
-        const deleteNounDto: DeleteSynonymDto = { id: synonymId };
-        deleteMutation.mutate(deleteNounDto);
+        const deleteSynonymDto: DeleteSynonymDto = { srchSynId };
+        deleteMutation.mutate(deleteSynonymDto);
       },
     });
   };
+
   const onSelectionChange = (selectedKeys: React.Key[]) => {
     setSelectedRowKeys(selectedKeys);
   };
@@ -111,13 +112,17 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
 
   return (
     <div className="mt-5 w-1/2 min-w-[1000px]">
-      <SynonymPageHeader fileList={fileList} updateFileList={setFileList} />
+      <SynonymPageHeader
+        fileList={fileList}
+        updateFileList={setFileList}
+        totalCount={totalCount}
+      />
       <Table
         bordered
         rowSelection={rowSelection}
         columns={columns}
         dataSource={synonymList}
-        rowKey="id"
+        rowKey="srchSynId"
         loading={isLoading}
         pagination={{
           total: totalCount,

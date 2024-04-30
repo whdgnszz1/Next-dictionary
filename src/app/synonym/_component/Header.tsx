@@ -11,11 +11,13 @@ import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 interface SynonymPageHeaderProps {
   fileList: RcFile[];
   updateFileList: (updateFn: (fileList: RcFile[]) => RcFile[]) => void;
+  totalCount: number;
 }
 
 function SynonymPageHeader({
   fileList,
   updateFileList,
+  totalCount,
 }: SynonymPageHeaderProps) {
   const [isBulkModalVisible, setIsBulkModalVisible] = useState(false);
   const [isSingleModalVisible, setIsSingleModalVisible] = useState(false);
@@ -29,7 +31,10 @@ function SynonymPageHeader({
 
   return (
     <div className="flex items-center justify-between py-2">
-      <Search placeholder="키워드 검색" />
+      <div className="flex gap-2 items-center font-semibold">
+        <Search placeholder="키워드 검색" />
+        <p>키워드 : 총 {totalCount}건</p>
+      </div>
       <div className="flex gap-2">
         <PrimaryButton text="추가" onClick={showSingleModal} />
         <PrimaryButton text="일괄 유의어 사전 등록" onClick={showBulkModal} />

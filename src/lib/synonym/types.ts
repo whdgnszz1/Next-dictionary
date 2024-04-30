@@ -14,5 +14,5 @@ export type CreateSynonymDto = {
 };
 
 export type DeleteSynonymDto = {
-  id: number;
+  srchSynId: number;
 };
