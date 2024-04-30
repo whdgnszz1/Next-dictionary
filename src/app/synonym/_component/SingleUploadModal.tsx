@@ -39,7 +39,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       console.error("단어 추가 중 오류가 발생했습니다.", error);
     },
   });
-  console.log(srchSynKeyword, srchSynTerm, srchSynOneWayYsno);
+
   const handleSubmit = () => {
     if (srchSynKeyword && srchSynTerm) {
       createSynonym({ srchSynKeyword, srchSynTerm, srchSynOneWayYsno });

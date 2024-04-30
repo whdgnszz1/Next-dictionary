@@ -18,7 +18,7 @@ function CustomInput({
 }: Props) {
   return (
     <Input
-      className="w-1/2"
+      className="w-3/4"
       allowClear
       type={type}
       placeholder={placeholder}
