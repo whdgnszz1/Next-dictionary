@@ -24,10 +24,17 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const [analysisResult, setAnalysisResult] = useState<AnalyzeAPIResponse>();
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
 
+  const onReset = () => {
+    setSrchNoun("");
+    setError("");
+    setAnalysisResult(undefined);
+    setUserDefinedTerms("");
+  };
+
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
       console.log("단어가 성공적으로 추가되었습니다.");
-      setSrchNoun("");
+      onReset();
       onOk();
     },
     onError: (error) => {
@@ -36,11 +43,13 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   });
 
   const onCancelHandler = () => {
-    setSrchNoun("");
-    setError("");
-    setAnalysisResult(undefined);
-    setUserDefinedTerms("");
+    onReset();
     onCancel();
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSrchNoun(e.target.value);
+    setError("");
   };
 
   const handleSubmit = () => {
@@ -89,11 +98,6 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       console.error("분석 중 오류가 발생했습니다", error);
       setError("분석 중 오류가 발생했습니다.");
     }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSrchNoun(e.target.value);
-    setError("");
   };
 
   return (

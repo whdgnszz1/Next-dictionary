@@ -66,8 +66,8 @@ const NounPage = ({ searchParams }: NounPageProps) => {
   const columns: ColumnsType<NounType> = [
     {
       title: "키워드",
-      dataIndex: "term",
-      key: "term",
+      dataIndex: "srchNoun",
+      key: "srchNoun",
       sorter: (a: NounType, b: NounType) =>
         a.srchNoun.localeCompare(b.srchNoun),
       align: "center",
@@ -78,7 +78,7 @@ const NounPage = ({ searchParams }: NounPageProps) => {
       key: "cretDttm",
       sorter: (a: NounType, b: NounType) =>
         new Date(a.cretDttm).getTime() - new Date(b.cretDttm).getTime(),
-      render: (text: string) => text?.toString().slice(4, 16),
+      render: (text: string) => text.split("T")[0],
       align: "center",
     },
     {

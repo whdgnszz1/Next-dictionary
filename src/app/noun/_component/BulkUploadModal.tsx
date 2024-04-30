@@ -62,6 +62,7 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         body: formData,
       });
       console.log("Upload successful");
+      updateFileList(() => []);
       onOk();
     } catch (error) {
       console.error("Upload failed:", error);
