@@ -1,10 +1,5 @@
 import { ApiResponse, SynonymListResponse } from "@/shared/types/api-response";
-import {
-  CreateSynonymDto,
-  DeleteSynonymDto,
-  PutSynonymDto,
-  SynonymType,
-} from "./types";
+import { CreateSynonymDto, DeleteSynonymDto, PutSynonymDto } from "./types";
 import { fetchAPI } from "@/shared/api/fetchApi";
 
 export async function getSynonymList(
@@ -24,14 +19,6 @@ export async function getSynonymList(
       method: "GET",
     }
   );
-}
-
-export async function getSynonym(
-  srchSynId: number
-): Promise<ApiResponse<SynonymType>> {
-  return fetchAPI<ApiResponse<SynonymType>>(`/synonym/${srchSynId}`, {
-    method: "GET",
-  });
 }
 
 export async function createSynonym(

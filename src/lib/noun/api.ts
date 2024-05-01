@@ -1,5 +1,5 @@
 import { ApiResponse, NounListResponse } from "@/shared/types/api-response";
-import { CreateNounDto, NounType, DeleteNounDto } from "./types";
+import { CreateNounDto, DeleteNounDto } from "./types";
 import { fetchAPI } from "@/shared/api/fetchApi";
 
 export async function getNounList(
@@ -19,14 +19,6 @@ export async function getNounList(
       method: "GET",
     }
   );
-}
-
-export async function getNoun(
-  srchNounId: number
-): Promise<ApiResponse<NounType>> {
-  return fetchAPI<ApiResponse<NounType>>(`/noun/${srchNounId}`, {
-    method: "GET",
-  });
 }
 
 export async function createNoun(
