@@ -59,10 +59,6 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
       setError("");
     },
-    onError: (error) => {
-      console.error("분석 중 오류가 발생했습니다", error);
-      setError("분석 중 오류가 발생했습니다.");
-    },
   });
 
   const handleAnalysis = () => {

@@ -1,8 +1,7 @@
 "use client";
-
 import React, { useState } from "react";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
-import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
+import { useAnalyzeKeyword } from "@/lib/elastic"; // Assuming useAnalyzeKeyword is exported from here
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import toast from "react-hot-toast";
@@ -25,30 +24,9 @@ type Props = {
 function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
   const [term, setTerm] = useState<string>("");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTerm(e.target.value);
-  };
-
-  const handleAnalysis = async () => {
-    if (term.trim() === "") {
-      toast.error(`검색어를 입력해주세요.`);
-      return;
-    }
-
-    try {
-      const result: AnalyzeAPIResponse = await fetchElasticsearch(
-        `/nori_index/_analyze`,
-        {
-          method: "POST",
-          body: {
-            text: term,
-            analyzer: "nori",
-            explain: true,
-          },
-        }
-      );
-
-      const tokens = result.detail.tokenizer.tokens;
+  const { mutate: analyzeKeyword } = useAnalyzeKeyword({
+    onSuccess: (data) => {
+      const tokens = data.detail.tokenizer.tokens;
 
       const definedTerms = tokens
         .filter(
@@ -81,10 +59,19 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
       });
 
       setTerm("");
-    } catch (error) {
-      toast.error(`분석 중 오류가 발생했습니다. \n ${error}`);
-      console.error("Failed to Analyze", error);
+    },
+  });
+
+  const handleAnalysis = () => {
+    if (term.trim() === "") {
+      toast.error(`검색어를 입력해주세요.`);
+      return;
     }
+    analyzeKeyword({ text: term, analyzer: "nori", explain: true });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTerm(e.target.value);
   };
 
   return (
@@ -100,7 +87,6 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
         placeholder={placeholder}
         value={term}
         onChange={handleInputChange}
-        onPressEnter={handleAnalysis}
       />
       <PrimaryButton text="검색" htmlType="submit" />
     </form>
