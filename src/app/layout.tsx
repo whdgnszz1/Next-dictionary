@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import RQProvider from "@/shared/component/RQProvider";
-
 import "./ui/globals.css";
-import { ConfigProvider, theme } from "antd";
+
+import RQProvider from "@/shared/component/RQProvider";
+import { Toaster } from "react-hot-toast";
+
+import { ConfigProvider } from "antd";
 import Navbar from "./ui/shared/navbar/Navbar";
 import Footer from "./ui/shared/footer/Footer";
 
@@ -32,6 +34,7 @@ export default function RootLayout({
       <body>
         <ConfigProvider theme={globalTheme}>
           <RQProvider>
+            <Toaster position="top-center" />
             <div className="flex flex-col justify-between h-dvh px-[20px] pt-[40px] pb-[20px]">
               <Navbar />
               <div className="h-full overflow-auto">{children}</div>
