@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getSynonymList, SYNONYM_KEY, SynonymType } from "..";
+import { getSynonymList, SYNONYM_KEY } from "..";
 import { ApiResponse, SynonymListResponse } from "@/shared/types/api-response";
 import { ApiError } from "@/shared/types/api-error";
 

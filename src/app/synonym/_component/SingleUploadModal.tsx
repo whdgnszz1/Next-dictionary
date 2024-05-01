@@ -4,8 +4,6 @@ import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import { useAnalyzeKeyword } from "@/lib/elastic";
 import { SynonymType, useCreateSynonym, usePutSynonym } from "@/lib/synonym";
-import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
-import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { analyzeKeywordSuccessHandler } from "@/shared/utils";
 import { Button, Modal, Radio, RadioChangeEvent } from "antd";
 import { useEffect, useState } from "react";

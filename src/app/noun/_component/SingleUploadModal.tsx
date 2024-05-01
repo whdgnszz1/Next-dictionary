@@ -4,12 +4,9 @@ import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import { useAnalyzeKeyword } from "@/lib/elastic";
 import { useCreateNoun } from "@/lib/noun";
-import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
-import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { analyzeKeywordSuccessHandler } from "@/shared/utils";
 import { Button, Modal } from "antd";
 import { useState } from "react";
-import toast from "react-hot-toast";
 
 interface SingleUploadModalProps {
   isVisible: boolean;

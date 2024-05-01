@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from "@tanstack/react-query";
-import { getNounList, NOUN_KEY, NounType } from "..";
+import { getNounList, NOUN_KEY } from "..";
 import { ApiResponse, NounListResponse } from "@/shared/types/api-response";
 import { ApiError } from "@/shared/types/api-error";
 

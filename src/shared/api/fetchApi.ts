@@ -1,8 +1,9 @@
-import { CreateNounDto, UpdateNounDto } from "@/lib/noun";
+import { CreateNounDto } from "@/lib/noun";
+import { CreateSynonymDto } from "@/lib/synonym";
 
 interface FetchAPIOptions {
   method: "GET" | "POST" | "PUT" | "DELETE";
-  body?: CreateNounDto | UpdateNounDto | FormData | null;
+  body?: CreateNounDto | CreateSynonymDto | FormData | null;
 }
 
 export async function fetchAPI<T>(
