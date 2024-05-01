@@ -13,6 +13,13 @@ export type CreateSynonymDto = {
   srchSynOneWayYsno: string;
 };
 
+export type PutSynonymDto = {
+  srchSynId: number;
+  srchSynKeyword: string;
+  srchSynTerm: string;
+  srchSynOneWayYsno: string;
+};
+
 export type DeleteSynonymDto = {
   srchSynId: number;
 };

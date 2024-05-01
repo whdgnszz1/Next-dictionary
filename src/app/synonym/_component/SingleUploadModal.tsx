@@ -2,7 +2,7 @@
 
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
-import { SynonymType, useCreateSynonym } from "@/lib/synonym";
+import { SynonymType, useCreateSynonym, usePutSynonym } from "@/lib/synonym";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { Button, Modal, Radio, RadioChangeEvent } from "antd";
@@ -38,12 +38,19 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     }
   }, [initialSynonym]);
 
+  const onReset = () => {
+    setSrchSynKeyword("");
+    setSrchSynTerm("");
+    setSrchSynOneWayYsno("Y");
+    setError("");
+    setAnalysisResult(null);
+    setUserDefinedTerms("");
+  };
+
   const { mutate: createSynonym } = useCreateSynonym({
     onSuccess: () => {
       console.log("단어가 성공적으로 추가되었습니다.");
-      setSrchSynKeyword("");
-      setSrchSynTerm("");
-      setSrchSynOneWayYsno("Y");
+      onReset();
       onOk();
     },
     onError: (error) => {
@@ -51,11 +58,32 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     },
   });
 
+  const { mutate: putSynonym } = usePutSynonym({
+    onSuccess: () => {
+      console.log("단어가 성공적으로 수정되었습니다.");
+      onReset();
+      onOk();
+    },
+    onError: (error) => {
+      console.error("단어 수정 중 오류가 발생했습니다.", error);
+    },
+  });
+
   const handleSubmit = () => {
-    if (srchSynKeyword && srchSynTerm) {
-      createSynonym({ srchSynKeyword, srchSynTerm, srchSynOneWayYsno });
+    if (!srchSynKeyword || !srchSynTerm) {
+      setError("모든 필드를 입력해주세요.");
+      return;
+    }
+
+    if (initialSynonym) {
+      putSynonym({
+        srchSynId: initialSynonym?.srchSynId,
+        srchSynKeyword,
+        srchSynTerm,
+        srchSynOneWayYsno,
+      });
     } else {
-      setError("단어를 입력해주세요.");
+      createSynonym({ srchSynKeyword, srchSynTerm, srchSynOneWayYsno });
     }
   };
 
@@ -71,9 +99,9 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     field: string
   ) => {
     let value = e.target.value;
-    value = value.replace(/[\s,]+/g, "");
 
     if (field === "keyword") {
+      value = value.replace(/[\s,]+/g, "");
       setSrchSynKeyword(value);
       if (/[\s,]/.test(e.target.value)) {
         setError("키워드는 한 단어만 입력이 가능합니다.");
@@ -90,12 +118,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   };
 
   const onCancelHandler = () => {
-    setSrchSynKeyword("");
-    setSrchSynTerm("");
-    setSrchSynOneWayYsno("Y");
-    setError("");
-    setAnalysisResult(null);
-    setUserDefinedTerms("");
+    onReset();
     onCancel();
   };
 
