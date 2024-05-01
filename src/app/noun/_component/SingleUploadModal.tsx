@@ -7,6 +7,7 @@ import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { Button, Modal } from "antd";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface SingleUploadModalProps {
   isVisible: boolean;
@@ -33,12 +34,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   const { mutate: createNoun } = useCreateNoun({
     onSuccess: () => {
-      console.log("단어가 성공적으로 추가되었습니다.");
       onReset();
       onOk();
-    },
-    onError: (error) => {
-      console.error("단어 추가 중 오류가 발생했습니다.", error);
     },
   });
 
@@ -56,7 +53,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     if (srchNoun) {
       createNoun({ srchNoun });
     } else {
-      setError("단어를 입력해주세요.");
+      setError("등록할 단어를 입력해주세요.");
     }
   };
 
@@ -95,8 +92,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         .join(", ");
       setUserDefinedTerms(definedTerms);
     } catch (error) {
-      console.error("분석 중 오류가 발생했습니다", error);
-      setError("분석 중 오류가 발생했습니다.");
+      toast.error(`분석 중 오류가 발생했습니다. \n ${error}`);
+      console.error("Failed to Analyze", error);
     }
   };
 
@@ -124,7 +121,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
         <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
-      {error && <div className="text-red mt-[10px]">{error}</div>}
+      {error && <div className="text-red-500 mt-[10px] px-[2px]">{error}</div>}
       {userDefinedTerms && (
         <div>
           <p className="font-bold pt-4 pb-2">색인 어휘 추출 결과:</p>
