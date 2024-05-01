@@ -69,13 +69,19 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     e: React.ChangeEvent<HTMLInputElement>,
     field: string
   ) => {
-    const { value } = e.target;
+    let value = e.target.value;
+    value = value.replace(/[\s,]+/g, "");
+
     if (field === "keyword") {
       setSrchSynKeyword(value);
+      if (/[\s,]/.test(e.target.value)) {
+        setError("키워드는 한 단어만 입력이 가능합니다.");
+      } else {
+        setError("");
+      }
     } else if (field === "term") {
       setSrchSynTerm(value);
     }
-    setError("");
   };
 
   const handleChangeDirection = (e: RadioChangeEvent) => {
@@ -141,7 +147,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       <div className="flex gap-2">
         <CustomInput
           type="text"
-          placeholder="키워드 입력"
+          placeholder="키워드 입력 (한 단어만 가능)"
           value={srchSynKeyword}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             handleChange(e, "keyword")
@@ -150,7 +156,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         />
         <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
-      {error && <div className="text-red mt-[10px]">{error}</div>}
+      {error && <div className="text-red-500 mt-[10px] px-[2px]">{error}</div>}
       <div className="flex gap-2 py-2">
         <Radio.Group onChange={handleChangeDirection} value={srchSynOneWayYsno}>
           <Radio value="Y">단방향</Radio>
