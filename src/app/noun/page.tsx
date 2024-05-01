@@ -12,6 +12,7 @@ import {
 import Header from "./_component/Header";
 import { ColumnsType } from "antd/es/table";
 import { compareDates } from "@/shared/utils";
+import toast from "react-hot-toast";
 
 type NounPageProps = {
   searchParams: {
@@ -36,10 +37,11 @@ const NounPage = ({ searchParams }: NounPageProps) => {
 
   const deleteMutation = useDeleteNoun({
     onSuccess: () => {
-      console.log("사용자 사전이 성공적으로 삭제되었습니다.");
+      toast.success(`사용자 사전이 성공적으로 삭제되었습니다.`);
     },
     onError: (error: unknown) => {
-      console.error("Error deleting noun:", error);
+      toast.error(`사용자 사전 삭제 중 오류가 발생했습니다. \n ${error}`);
+      console.error("Error deleting Noun:", error);
     },
   });
 

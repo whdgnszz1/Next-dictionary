@@ -4,6 +4,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import { fetchAPI } from "@/shared/api/fetchApi";
 import { RcFile, UploadFile } from "antd/es/upload";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
+import toast from "react-hot-toast";
 
 interface BulkUploadModalProps {
   isVisible: boolean;
@@ -61,12 +62,12 @@ const BulkUploadModal: React.FC<BulkUploadModalProps> = ({
         method: "POST",
         body: formData,
       });
-      console.log("Upload successful");
+      toast.success("업로드에 성공했습니다.");
       updateFileList(() => []);
       onOk();
     } catch (error) {
+      toast.error(`파일 업로드 중 오류가 발생했습니다. \n ${error}`);
       console.error("Upload failed:", error);
-      alert("파일 업로드에 실패했습니다. 다시 시도해주세요.");
     }
   };
 

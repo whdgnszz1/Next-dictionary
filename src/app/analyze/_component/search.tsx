@@ -5,6 +5,7 @@ import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
+import toast from "react-hot-toast";
 
 export interface SearchResult {
   key: string;
@@ -30,7 +31,7 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
 
   const handleAnalysis = async () => {
     if (term.trim() === "") {
-      console.log("검색어가 비어있습니다.");
+      toast.error(`검색어를 입력해주세요.`);
       return;
     }
 
@@ -81,7 +82,8 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
 
       setTerm("");
     } catch (error) {
-      console.error("분석 중 오류가 발생했습니다", error);
+      toast.error(`분석 중 오류가 발생했습니다. \n ${error}`);
+      console.error("Failed to Analyze", error);
     }
   };
 

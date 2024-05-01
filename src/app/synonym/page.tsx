@@ -16,6 +16,7 @@ import SynonymPageHeader from "./_component/Header";
 import SingleUploadModal from "./_component/SingleUploadModal";
 
 import { compareDates } from "@/shared/utils";
+import toast from "react-hot-toast";
 
 type SynonymPageProps = {
   searchParams: {
@@ -44,10 +45,11 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
 
   const deleteMutation = useDeleteSynonym({
     onSuccess: () => {
-      console.log("유의어 사전이 성공적으로 삭제되었습니다.");
+      toast.success("유의어 사전이 성공적으로 삭제되었습니다.");
     },
     onError: (error: unknown) => {
-      console.error("Error deleting synonym:", error);
+      toast.error(`유의어 사전 삭제 중 오류가 발생했습니다. \n ${error}`);
+      console.error("Error deleting Synonym:", error);
     },
   });
 
