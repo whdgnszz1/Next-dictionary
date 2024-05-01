@@ -21,7 +21,7 @@ export const useCreateSynonym = (
     },
     onError: (error) => {
       toast.error(`유의어 추가 중 오류가 발생했습니다. \n ${error.message}`);
-      console.error("Failed to Create Noun", error);
+      console.error("Failed to Create Synonym", error);
     },
     ...options,
   });
