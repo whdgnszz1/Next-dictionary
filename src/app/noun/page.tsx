@@ -1,18 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Modal, Table } from "antd";
+import { Modal, Table } from "antd";
 import { RcFile } from "antd/es/upload";
-import {
-  useGetNounList,
-  useDeleteNoun,
-  DeleteNounDto,
-  NounType,
-} from "@/lib/noun";
+import { useGetNounList, useDeleteNoun, DeleteNounDto } from "@/lib/noun";
 import Header from "./_component/Header";
-import { ColumnsType } from "antd/es/table";
-import { compareDates } from "@/shared/utils";
 import toast from "react-hot-toast";
+import { getColumns } from "./columns";
 
 type NounPageProps = {
   searchParams: {
@@ -66,41 +60,7 @@ const NounPage = ({ searchParams }: NounPageProps) => {
     onChange: onSelectionChange,
   };
 
-  const columns: ColumnsType<NounType> = [
-    {
-      title: "키워드",
-      dataIndex: "srchNoun",
-      key: "srchNoun",
-      sorter: (a: NounType, b: NounType) =>
-        a.srchNoun.localeCompare(b.srchNoun),
-      align: "center",
-    },
-    {
-      title: "생성일",
-      dataIndex: "cretDttm",
-      key: "cretDttm",
-      sorter: (a: NounType, b: NounType) =>
-        compareDates(a.cretDttm, b.cretDttm),
-      render: (cretDttm: string) => cretDttm?.split("T")[0],
-      align: "center",
-    },
-    {
-      title: "관리",
-      key: "action",
-      align: "center",
-      render: (_: any, record: NounType) => (
-        <div className="flex gap-2 justify-center items-center">
-          <Button
-            onClick={() => handleDelete(record.srchNounId)}
-            type="primary"
-            danger
-          >
-            삭제
-          </Button>
-        </div>
-      ),
-    },
-  ];
+  const columns = getColumns(handleDelete);
 
   return (
     <div className="mt-5 w-1/2 min-w-[1000px]">
