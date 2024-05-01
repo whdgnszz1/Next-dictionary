@@ -1,10 +1,11 @@
 "use client";
+
 import React, { useState } from "react";
-import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
-import { useAnalyzeKeyword } from "@/lib/elastic"; // Assuming useAnalyzeKeyword is exported from here
+import { useAnalyzeKeyword } from "@/lib/elastic";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import toast from "react-hot-toast";
+import { analyzeKeywordSuccessHandler } from "@/shared/utils";
 
 export interface SearchResult {
   key: string;
@@ -26,24 +27,14 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
 
   const { mutate: analyzeKeyword } = useAnalyzeKeyword({
     onSuccess: (data) => {
-      const tokens = data.detail.tokenizer.tokens;
-
-      const definedTerms = tokens
-        .filter(
-          (token) => token.morphemes && token.morphemes.includes(token.token)
-        )
-        .map((token) => token.token)
-        .join(", ");
-
-      const morphemeAnalysis = tokens
-        .map((token) => `${token.token} : ${token.leftPOS.split("(")[0]}`)
-        .join(", ");
+      const { definedTerms, formattedMorphemeAnalysis } =
+        analyzeKeywordSuccessHandler(data);
 
       const newResult: SearchResult = {
         key: term,
         text: term,
         indexVocabulary: definedTerms,
-        morphemeAnalysis: morphemeAnalysis,
+        morphemeAnalysis: formattedMorphemeAnalysis,
         synonyms: "",
       };
 

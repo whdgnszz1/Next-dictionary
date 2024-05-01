@@ -6,6 +6,7 @@ import { useAnalyzeKeyword } from "@/lib/elastic";
 import { SynonymType, useCreateSynonym, usePutSynonym } from "@/lib/synonym";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
+import { analyzeKeywordSuccessHandler } from "@/shared/utils";
 import { Button, Modal, Radio, RadioChangeEvent } from "antd";
 import { useEffect, useState } from "react";
 
@@ -62,22 +63,10 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   const { mutate: analyzeKeyword } = useAnalyzeKeyword({
     onSuccess: (data) => {
-      const tokens = data.detail.tokenizer.tokens;
-
-      const definedTerms = tokens
-        .filter(
-          (token) => token.morphemes && token.morphemes.includes(token.token)
-        )
-        .map((token) => token.token)
-        .join(", ");
+      const { definedTerms, formattedMorphemeAnalysis } =
+        analyzeKeywordSuccessHandler(data);
       setUserDefinedTerms(definedTerms);
-
-      const formattedMorphemeAnalysis = tokens
-        .map((token) => `${token.token} : ${token.leftPOS.split("(")[0]}`)
-        .join(", ");
       setMorphemeAnalysis(formattedMorphemeAnalysis);
-
-      setError("");
     },
   });
 

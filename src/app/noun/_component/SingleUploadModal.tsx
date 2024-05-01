@@ -6,6 +6,7 @@ import { useAnalyzeKeyword } from "@/lib/elastic";
 import { useCreateNoun } from "@/lib/noun";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
+import { analyzeKeywordSuccessHandler } from "@/shared/utils";
 import { Button, Modal } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -42,21 +43,10 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   const { mutate: analyzeKeyword } = useAnalyzeKeyword({
     onSuccess: (data) => {
-      const tokens = data.detail.tokenizer.tokens;
-
-      const definedTerms = tokens
-        .filter(
-          (token) => token.morphemes && token.morphemes.includes(token.token)
-        )
-        .map((token) => token.token)
-        .join(", ");
+      const { definedTerms, formattedMorphemeAnalysis } =
+        analyzeKeywordSuccessHandler(data);
       setUserDefinedTerms(definedTerms);
-
-      const formattedMorphemeAnalysis = tokens
-        .map((token) => `${token.token} : ${token.leftPOS.split("(")[0]}`)
-        .join(", ");
       setMorphemeAnalysis(formattedMorphemeAnalysis);
-
       setError("");
     },
   });
