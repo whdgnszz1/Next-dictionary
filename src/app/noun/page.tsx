@@ -5,7 +5,6 @@ import { Modal, Table } from "antd";
 import { RcFile } from "antd/es/upload";
 import { useGetNounList, useDeleteNoun, DeleteNounDto } from "@/lib/noun";
 import Header from "./_component/Header";
-import toast from "react-hot-toast";
 import { getColumns } from "./columns";
 
 type NounPageProps = {

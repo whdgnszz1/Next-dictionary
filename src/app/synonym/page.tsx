@@ -8,15 +8,13 @@ import {
   SynonymType,
 } from "@/lib/synonym";
 
-import Table, { ColumnsType } from "antd/es/table";
-import { Button, Modal } from "antd";
+import Table from "antd/es/table";
+import { Modal } from "antd";
 import { RcFile } from "antd/es/upload";
 
 import SynonymPageHeader from "./_component/Header";
 import SingleUploadModal from "./_component/SingleUploadModal";
 
-import { compareDates } from "@/shared/utils";
-import toast from "react-hot-toast";
 import { getColumns } from "./columns";
 
 type SynonymPageProps = {
