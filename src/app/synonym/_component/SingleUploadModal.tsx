@@ -2,6 +2,7 @@
 
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
+import { useAnalyzeKeyword } from "@/lib/elastic";
 import { SynonymType, useCreateSynonym, usePutSynonym } from "@/lib/synonym";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
@@ -26,9 +27,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const [srchSynOneWayYsno, setSrchSynOneWayYsno] = useState<string>("Y");
 
   const [error, setError] = useState<string>("");
-  const [analysisResult, setAnalysisResult] =
-    useState<AnalyzeAPIResponse | null>();
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
+  const [morphemeAnalysis, setMorphemeAnalysis] = useState("");
 
   useEffect(() => {
     if (initialSynonym) {
@@ -43,7 +43,6 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     setSrchSynTerm("");
     setSrchSynOneWayYsno("Y");
     setError("");
-    setAnalysisResult(null);
     setUserDefinedTerms("");
   };
 
@@ -60,6 +59,40 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       onOk();
     },
   });
+
+  const { mutate: analyzeKeyword } = useAnalyzeKeyword({
+    onSuccess: (data) => {
+      const tokens = data.detail.tokenizer.tokens;
+
+      const definedTerms = tokens
+        .filter(
+          (token) => token.morphemes && token.morphemes.includes(token.token)
+        )
+        .map((token) => token.token)
+        .join(", ");
+      setUserDefinedTerms(definedTerms);
+
+      const formattedMorphemeAnalysis = tokens
+        .map((token) => `${token.token} : ${token.leftPOS.split("(")[0]}`)
+        .join(", ");
+      setMorphemeAnalysis(formattedMorphemeAnalysis);
+
+      setError("");
+    },
+    onError: (error) => {
+      console.error("분석 중 오류가 발생했습니다", error);
+      setError("분석 중 오류가 발생했습니다.");
+    },
+  });
+
+  const handleAnalysis = () => {
+    if (!srchSynKeyword) {
+      setError("단어를 입력해주세요.");
+      return;
+    }
+    setError("");
+    analyzeKeyword({ text: srchSynKeyword, analyzer: "nori", explain: true });
+  };
 
   const handleSubmit = () => {
     if (!srchSynKeyword || !srchSynTerm) {
@@ -114,39 +147,6 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     onCancel();
   };
 
-  const handleAnalysis = async () => {
-    if (!srchSynKeyword) {
-      setError("단어를 입력해주세요.");
-      return;
-    }
-    setError("");
-    try {
-      const result: AnalyzeAPIResponse = await fetchElasticsearch(
-        `/nori_index/_analyze`,
-        {
-          method: "POST",
-          body: {
-            text: srchSynKeyword,
-            analyzer: "nori",
-            explain: true,
-          },
-        }
-      );
-      setAnalysisResult(result);
-
-      const definedTerms = result.detail.tokenizer.tokens
-        .filter((token) => {
-          return token.morphemes && token.morphemes.includes(token.token);
-        })
-        .map((token) => token.token)
-        .join(", ");
-      setUserDefinedTerms(definedTerms);
-    } catch (error) {
-      console.error("분석 중 오류가 발생했습니다", error);
-      setError("분석 중 오류가 발생했습니다.");
-    }
-  };
-
   return (
     <Modal
       className="min-h-[500px]"
@@ -199,17 +199,10 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         </div>
       )}
 
-      {analysisResult && (
+      {morphemeAnalysis && (
         <>
           <p className="font-bold pt-4 pb-2">형태소 분석 결과:</p>
-
-          <div>
-            {analysisResult.detail.tokenizer.tokens.map((token, index) => (
-              <div key={index}>
-                <pre>{`${token.token} : ${token.leftPOS.split("(")[0]}`}</pre>
-              </div>
-            ))}
-          </div>
+          <pre>{morphemeAnalysis}</pre>
         </>
       )}
     </Modal>
