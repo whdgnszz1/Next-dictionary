@@ -62,7 +62,7 @@ function AnalyzeSearch({ placeholder, onSearchResults }: Props) {
         .join(", ");
 
       const newResult: SearchResult = {
-        key: tokens.map((t) => t.start_offset).join(","),
+        key: term,
         text: term,
         indexVocabulary: definedTerms,
         morphemeAnalysis: morphemeAnalysis,
