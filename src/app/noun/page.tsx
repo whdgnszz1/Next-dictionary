@@ -29,15 +29,7 @@ const NounPage = ({ searchParams }: NounPageProps) => {
   const nounList = data?.data.items;
   const totalCount = data?.data.totalCount ?? 0;
 
-  const deleteMutation = useDeleteNoun({
-    onSuccess: () => {
-      toast.success(`사용자 사전이 성공적으로 삭제되었습니다.`);
-    },
-    onError: (error: unknown) => {
-      toast.error(`사용자 사전 삭제 중 오류가 발생했습니다. \n ${error}`);
-      console.error("Error deleting Noun:", error);
-    },
-  });
+  const deleteMutation = useDeleteNoun();
 
   const handleDelete = (srchNounId: number) => {
     Modal.confirm({
