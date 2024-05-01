@@ -2,6 +2,7 @@
 
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
+import InputError from "@/app/ui/shared/error/InputError";
 import { useAnalyzeKeyword } from "@/lib/elastic";
 import { useCreateNoun } from "@/lib/noun";
 import { analyzeKeywordSuccessHandler } from "@/shared/utils";
@@ -20,7 +21,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   onCancel,
 }) => {
   const [srchNoun, setSrchNoun] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const [inputError, setInputError] = useState<string>("");
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
   const [morphemeAnalysis, setMorphemeAnalysis] = useState("");
 
@@ -28,7 +29,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     setSrchNoun("");
     setUserDefinedTerms("");
     setMorphemeAnalysis("");
-    setError("");
+    setInputError("");
   };
 
   const { mutate: createNoun } = useCreateNoun({
@@ -44,16 +45,16 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         analyzeKeywordSuccessHandler(data);
       setUserDefinedTerms(definedTerms);
       setMorphemeAnalysis(formattedMorphemeAnalysis);
-      setError("");
+      setInputError("");
     },
   });
 
   const handleAnalysis = () => {
     if (!srchNoun) {
-      setError("단어를 입력해주세요.");
+      setInputError("단어를 입력해주세요.");
       return;
     }
-    setError("");
+    setInputError("");
     analyzeKeyword({ text: srchNoun, analyzer: "nori", explain: true });
   };
 
@@ -64,14 +65,14 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSrchNoun(e.target.value);
-    setError("");
+    setInputError("");
   };
 
   const handleSubmit = () => {
     if (srchNoun) {
       createNoun({ srchNoun });
     } else {
-      setError("등록할 단어를 입력해주세요.");
+      setInputError("등록할 단어를 입력해주세요.");
     }
   };
 
@@ -106,14 +107,13 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
         <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
-      {error && <div className="text-red-500 mt-[10px] px-[2px]">{error}</div>}
+      {inputError && <InputError error={inputError} />}
       {userDefinedTerms && (
         <div>
           <p className="font-bold pt-4 pb-2">색인 어휘 추출 결과:</p>
           <pre>{userDefinedTerms}</pre>
         </div>
       )}
-
       {morphemeAnalysis && (
         <>
           <p className="font-bold pt-4 pb-2">형태소 분석 결과:</p>

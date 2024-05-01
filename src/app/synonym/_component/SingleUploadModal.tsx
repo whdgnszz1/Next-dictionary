@@ -2,6 +2,7 @@
 
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
+import InputError from "@/app/ui/shared/error/InputError";
 import { useAnalyzeKeyword } from "@/lib/elastic";
 import { SynonymType, useCreateSynonym, usePutSynonym } from "@/lib/synonym";
 import { analyzeKeywordSuccessHandler } from "@/shared/utils";
@@ -25,7 +26,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const [srchSynTerm, setSrchSynTerm] = useState<string>("");
   const [srchSynOneWayYsno, setSrchSynOneWayYsno] = useState<string>("Y");
 
-  const [error, setError] = useState<string>("");
+  const [inputError, setInputError] = useState<string>("");
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
   const [morphemeAnalysis, setMorphemeAnalysis] = useState("");
 
@@ -41,7 +42,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     setSrchSynKeyword("");
     setSrchSynTerm("");
     setSrchSynOneWayYsno("Y");
-    setError("");
+    setInputError("");
     setUserDefinedTerms("");
   };
 
@@ -70,16 +71,16 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   const handleAnalysis = () => {
     if (!srchSynKeyword) {
-      setError("단어를 입력해주세요.");
+      setInputError("단어를 입력해주세요.");
       return;
     }
-    setError("");
+    setInputError("");
     analyzeKeyword({ text: srchSynKeyword, analyzer: "nori", explain: true });
   };
 
   const handleSubmit = () => {
     if (!srchSynKeyword || !srchSynTerm) {
-      setError("모든 필드를 입력해주세요.");
+      setInputError("모든 필드를 입력해주세요.");
       return;
     }
 
@@ -112,9 +113,9 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       value = value.replace(/[\s,]+/g, "");
       setSrchSynKeyword(value);
       if (/[\s,]/.test(e.target.value)) {
-        setError("키워드는 한 단어만 입력이 가능합니다.");
+        setInputError("키워드는 한 단어만 입력이 가능합니다.");
       } else {
-        setError("");
+        setInputError("");
       }
     } else if (field === "term") {
       setSrchSynTerm(value);
@@ -159,7 +160,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         />
         <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
-      {error && <div className="text-red-500 mt-[10px] px-[2px]">{error}</div>}
+      {inputError && <InputError error={inputError} />}
       <div className="flex gap-2 py-2">
         <Radio.Group onChange={handleChangeDirection} value={srchSynOneWayYsno}>
           <Radio value="Y">단방향</Radio>
