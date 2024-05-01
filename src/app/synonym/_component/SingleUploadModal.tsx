@@ -26,7 +26,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const [srchSynOneWayYsno, setSrchSynOneWayYsno] = useState<string>("Y");
 
   const [error, setError] = useState<string>("");
-  const [analysisResult, setAnalysisResult] = useState<AnalyzeAPIResponse>();
+  const [analysisResult, setAnalysisResult] =
+    useState<AnalyzeAPIResponse | null>();
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
 
   useEffect(() => {
@@ -93,7 +94,7 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     setSrchSynTerm("");
     setSrchSynOneWayYsno("Y");
     setError("");
-    setAnalysisResult(undefined);
+    setAnalysisResult(null);
     setUserDefinedTerms("");
     onCancel();
   };
@@ -141,7 +142,11 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <Button key="cancel" onClick={onCancelHandler}>
           취소
         </Button>,
-        <PrimaryButton key="submit" text="등록" onClick={handleSubmit} />,
+        <PrimaryButton
+          key="submit"
+          text={initialSynonym ? "수정" : "등록"}
+          onClick={handleSubmit}
+        />,
       ]}
     >
       <div className="flex gap-2">
