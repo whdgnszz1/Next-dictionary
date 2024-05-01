@@ -50,13 +50,8 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   const { mutate: createSynonym } = useCreateSynonym({
     onSuccess: () => {
-      toast.success("단어가 성공적으로 추가되었습니다.");
       onReset();
       onOk();
-    },
-    onError: (error) => {
-      toast.error(`단어 추가 중 오류가 발생했습니다. \n ${error}`);
-      console.error("Create Synonym Failed.", error);
     },
   });
 
