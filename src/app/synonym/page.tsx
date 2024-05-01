@@ -1,13 +1,20 @@
 "use client";
 
-import { useGetSynonymList } from "@/lib/synonym/hooks/useGetSynonymList";
-import { useDeleteSynonym } from "@/lib/synonym/hooks/useDeleteSynonym";
-import { DeleteSynonymDto, SynonymType } from "@/lib/synonym";
+import { useState } from "react";
+import {
+  useGetSynonymList,
+  useDeleteSynonym,
+  DeleteSynonymDto,
+  SynonymType,
+} from "@/lib/synonym";
+
 import Table, { ColumnsType } from "antd/es/table";
 import { Button, Modal } from "antd";
-import { useState } from "react";
 import { RcFile } from "antd/es/upload";
+
 import SynonymPageHeader from "./_component/Header";
+import SingleUploadModal from "./_component/SingleUploadModal";
+
 import { compareDates } from "@/shared/utils";
 
 type SynonymPageProps = {
@@ -20,6 +27,10 @@ type SynonymPageProps = {
 const SynonymPage = ({ searchParams }: SynonymPageProps) => {
   const [fileList, setFileList] = useState<RcFile[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentSynonym, setCurrentSynonym] = useState<SynonymType | null>(
+    null
+  );
 
   const q = searchParams?.q || "";
   const page = searchParams?.page || "1";
@@ -39,6 +50,11 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
       console.error("Error deleting synonym:", error);
     },
   });
+
+  const handleEdit = (record: SynonymType) => {
+    setCurrentSynonym(record);
+    setIsModalVisible(true);
+  };
 
   const handleDelete = (srchSynId: number) => {
     Modal.confirm({
@@ -96,8 +112,11 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
       title: "관리",
       key: "action",
       align: "center",
-      render: (_: any, record: SynonymType) => (
+      render: (_, record: SynonymType) => (
         <div className="flex gap-2 justify-center items-center">
+          <Button onClick={() => handleEdit(record)} type="primary">
+            수정
+          </Button>
           <Button
             onClick={() => handleDelete(record.srchSynId)}
             type="primary"
@@ -129,6 +148,18 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
           pageSize: 10,
           current: parseInt(page),
         }}
+      />
+      <SingleUploadModal
+        isVisible={isModalVisible}
+        onOk={() => {
+          setIsModalVisible(false);
+          setCurrentSynonym(null);
+        }}
+        onCancel={() => {
+          setIsModalVisible(false);
+          setCurrentSynonym(null);
+        }}
+        initialSynonym={currentSynonym}
       />
     </div>
   );

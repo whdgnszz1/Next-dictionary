@@ -2,22 +2,24 @@
 
 import CustomInput from "@/app/ui/shared/Input/CustomInput";
 import PrimaryButton from "@/app/ui/shared/button/PrimaryButton";
-import { useCreateSynonym } from "@/lib/synonym";
+import { SynonymType, useCreateSynonym } from "@/lib/synonym";
 import { fetchElasticsearch } from "@/shared/api/fetchElasticSearch";
 import { AnalyzeAPIResponse } from "@/shared/types/analyze-api-response";
 import { Button, Modal, Radio, RadioChangeEvent } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SingleUploadModalProps {
   isVisible: boolean;
   onOk: () => void;
   onCancel: () => void;
+  initialSynonym?: SynonymType | null;
 }
 
 const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   isVisible,
   onOk,
   onCancel,
+  initialSynonym,
 }) => {
   const [srchSynKeyword, setSrchSynKeyword] = useState<string>("");
   const [srchSynTerm, setSrchSynTerm] = useState<string>("");
@@ -26,6 +28,14 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   const [error, setError] = useState<string>("");
   const [analysisResult, setAnalysisResult] = useState<AnalyzeAPIResponse>();
   const [userDefinedTerms, setUserDefinedTerms] = useState("");
+
+  useEffect(() => {
+    if (initialSynonym) {
+      setSrchSynKeyword(initialSynonym.srchSynKeyword);
+      setSrchSynTerm(initialSynonym.srchSynTerm);
+      setSrchSynOneWayYsno(initialSynonym.srchSynOneWayYsno);
+    }
+  }, [initialSynonym]);
 
   const { mutate: createSynonym } = useCreateSynonym({
     onSuccess: () => {
