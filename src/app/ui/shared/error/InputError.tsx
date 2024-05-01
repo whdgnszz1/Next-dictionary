@@ -5,7 +5,9 @@ interface InputErrorInterface {
 }
 
 function InputError({ error }: InputErrorInterface) {
-  return <div className="text-red-500 mt-[10px] px-[2px]">{error}</div>;
+  return (
+    <div className="text-red-500 mt-[10px] px-[2px font-semibold">{error}</div>
+  );
 }
 
 export default InputError;

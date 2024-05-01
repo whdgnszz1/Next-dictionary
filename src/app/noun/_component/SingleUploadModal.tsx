@@ -64,8 +64,15 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSrchNoun(e.target.value);
-    setInputError("");
+    let value = e.target.value;
+    value = value.replace(/[\s,]+/g, "");
+    setSrchNoun(value);
+
+    if (/[\s,]/.test(e.target.value)) {
+      setInputError("키워드는 한 단어만 입력이 가능합니다.");
+    } else {
+      setInputError("");
+    }
   };
 
   const handleSubmit = () => {
