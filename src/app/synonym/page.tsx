@@ -44,15 +44,7 @@ const SynonymPage = ({ searchParams }: SynonymPageProps) => {
   const synonymList = data?.data.items;
   const totalCount = data?.data.totalCount ?? 0;
 
-  const deleteMutation = useDeleteSynonym({
-    onSuccess: () => {
-      toast.success("유의어 사전이 성공적으로 삭제되었습니다.");
-    },
-    onError: (error: unknown) => {
-      toast.error(`유의어 사전 삭제 중 오류가 발생했습니다. \n ${error}`);
-      console.error("Error deleting Synonym:", error);
-    },
-  });
+  const deleteMutation = useDeleteSynonym();
 
   const handleEdit = (record: SynonymType) => {
     setCurrentSynonym(record);
