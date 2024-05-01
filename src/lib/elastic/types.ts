@@ -1,3 +1,5 @@
-export type Term = {
-  term: string;
+export type AnalyzeKeywordDto = {
+  text: string;
+  analyzer: "nori";
+  explain: boolean;
 };
