@@ -22,28 +22,35 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   onCancel,
   initialSynonym,
 }) => {
-  const [srchSynKeyword, setSrchSynKeyword] = useState<string>("");
-  const [srchSynTerm, setSrchSynTerm] = useState<string>("");
-  const [srchSynOneWayYsno, setSrchSynOneWayYsno] = useState<string>("Y");
-
-  const [inputError, setInputError] = useState<string>("");
-  const [userDefinedTerms, setUserDefinedTerms] = useState("");
-  const [morphemeAnalysis, setMorphemeAnalysis] = useState("");
+  const [inputs, setInputs] = useState({
+    srchSynKeyword: "",
+    srchSynTerm: "",
+    srchSynOneWayYsno: "Y",
+    userDefinedTerms: "",
+    morphemeAnalysis: "",
+  });
+  const [inputError, setInputError] = useState("");
 
   useEffect(() => {
     if (initialSynonym) {
-      setSrchSynKeyword(initialSynonym.srchSynKeyword);
-      setSrchSynTerm(initialSynonym.srchSynTerm);
-      setSrchSynOneWayYsno(initialSynonym.srchSynOneWayYsno);
+      setInputs((inputs) => ({
+        ...inputs,
+        srchSynKeyword: initialSynonym.srchSynKeyword,
+        srchSynTerm: initialSynonym.srchSynTerm,
+        srchSynOneWayYsno: initialSynonym.srchSynOneWayYsno,
+      }));
     }
   }, [initialSynonym]);
 
   const onReset = () => {
-    setSrchSynKeyword("");
-    setSrchSynTerm("");
-    setSrchSynOneWayYsno("Y");
+    setInputs({
+      srchSynKeyword: "",
+      srchSynTerm: "",
+      srchSynOneWayYsno: "Y",
+      userDefinedTerms: "",
+      morphemeAnalysis: "",
+    });
     setInputError("");
-    setUserDefinedTerms("");
   };
 
   const { mutate: createSynonym } = useCreateSynonym({
@@ -64,22 +71,67 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     onSuccess: (data) => {
       const { definedTerms, formattedMorphemeAnalysis } =
         analyzeKeywordSuccessHandler(data);
-      setUserDefinedTerms(definedTerms);
-      setMorphemeAnalysis(formattedMorphemeAnalysis);
+      setInputs((inputs) => ({
+        ...inputs,
+        userDefinedTerms: definedTerms,
+        morphemeAnalysis: formattedMorphemeAnalysis,
+        srchSynKeyword: "",
+        srchSynTerm: "",
+      }));
     },
   });
 
-  const handleAnalysis = () => {
-    if (!srchSynKeyword) {
-      setInputError("단어를 입력해주세요.");
-      return;
+  const handleChangeDirection = (e: RadioChangeEvent) => {
+    const newDirection = e.target.value;
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      srchSynOneWayYsno: newDirection,
+      srchSynTerm: newDirection === "N" ? "" : prevInputs.srchSynTerm,
+    }));
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: keyof typeof inputs
+  ) => {
+    const { value } = e.target;
+    setInputs((prev) => ({
+      ...prev,
+      [field]:
+        field === "srchSynKeyword" && inputs.srchSynOneWayYsno === "Y"
+          ? value.replace(/[\s,]+/g, "")
+          : value,
+    }));
+
+    if (
+      field === "srchSynKeyword" &&
+      inputs.srchSynOneWayYsno === "Y" &&
+      /[\s,]/.test(value)
+    ) {
+      setInputError("키워드는 한 단어만 입력이 가능합니다.");
+    } else {
+      setInputError("");
     }
-    setInputError("");
-    analyzeKeyword({ text: srchSynKeyword, analyzer: "nori", explain: true });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (!inputs.srchSynKeyword) {
+        setInputError("단어를 입력해주세요.");
+        return;
+      }
+      setInputError("");
+      analyzeKeyword({
+        text: inputs.srchSynKeyword,
+        analyzer: "nori",
+        explain: true,
+      });
+    }
   };
 
   const handleSubmit = () => {
-    if (!srchSynKeyword || !srchSynTerm) {
+    if (!inputs.srchSynKeyword || !inputs.srchSynTerm) {
       setInputError("모든 필드를 입력해주세요.");
       return;
     }
@@ -87,47 +139,16 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
     if (initialSynonym) {
       putSynonym({
         srchSynId: initialSynonym?.srchSynId,
-        srchSynKeyword,
-        srchSynTerm,
-        srchSynOneWayYsno,
+        srchSynKeyword: inputs.srchSynKeyword,
+        srchSynTerm: inputs.srchSynTerm,
+        srchSynOneWayYsno: inputs.srchSynOneWayYsno,
       });
     } else {
-      createSynonym({ srchSynKeyword, srchSynTerm, srchSynOneWayYsno });
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleAnalysis();
-    }
-  };
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
-    let value = e.target.value;
-
-    if (field === "keyword" && srchSynOneWayYsno == "Y") {
-      value = value.replace(/[\s,]+/g, "");
-      setSrchSynKeyword(value);
-      if (/[\s,]/.test(e.target.value) && srchSynOneWayYsno == "Y") {
-        setInputError("키워드는 한 단어만 입력이 가능합니다.");
-      } else {
-        setInputError("");
-      }
-    } else if (field === "keyword" && srchSynOneWayYsno == "N") {
-      setSrchSynKeyword(value);
-    } else if (field === "term") {
-      setSrchSynTerm(value);
-    }
-  };
-
-  const handleChangeDirection = (e: RadioChangeEvent) => {
-    setSrchSynOneWayYsno(e.target.value);
-    if (e.target.value === "N") {
-      setSrchSynTerm("");
+      createSynonym({
+        srchSynKeyword: inputs.srchSynKeyword,
+        srchSynTerm: inputs.srchSynTerm,
+        srchSynOneWayYsno: inputs.srchSynOneWayYsno,
+      });
     }
   };
 
@@ -154,7 +175,10 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
       ]}
     >
       <div className="flex gap-2 py-2">
-        <Radio.Group onChange={handleChangeDirection} value={srchSynOneWayYsno}>
+        <Radio.Group
+          onChange={handleChangeDirection}
+          value={inputs.srchSynOneWayYsno}
+        >
           <Radio value="Y" disabled={!!initialSynonym}>
             단방향
           </Radio>
@@ -168,45 +192,50 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <CustomInput
           type="text"
           placeholder={
-            srchSynOneWayYsno == "Y"
+            inputs.srchSynOneWayYsno == "Y"
               ? "키워드 입력 (한 단어만 가능)"
               : "키워드 입력"
           }
-          value={srchSynKeyword}
+          value={inputs.srchSynKeyword}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange(e, "keyword")
+            handleInputChange(e, "srchSynKeyword")
           }
           onPressEnter={handleKeyPress}
         />
-        <PrimaryButton text="분석" onClick={handleAnalysis} />
+        <PrimaryButton
+          key="submit"
+          text={initialSynonym ? "수정" : "등록"}
+          onClick={handleSubmit}
+        />
+        ,
       </div>
       {inputError && <InputError error={inputError} />}
 
-      {srchSynOneWayYsno === "Y" && (
+      {inputs.srchSynOneWayYsno === "Y" && (
         <>
           <p className="px-[2px] pb-1 mt-2 font-semibold">유의어</p>
           <CustomInput
             type="text"
             placeholder="유의어 입력"
-            value={srchSynTerm}
+            value={inputs.srchSynTerm}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange(e, "term")
+              handleInputChange(e, "srchSynTerm")
             }
           />
         </>
       )}
 
-      {userDefinedTerms && (
+      {inputs.userDefinedTerms && (
         <div>
           <p className="font-bold pt-4 pb-2">색인 어휘 추출 결과:</p>
-          <pre>{userDefinedTerms}</pre>
+          <pre>{inputs.userDefinedTerms}</pre>
         </div>
       )}
 
-      {morphemeAnalysis && (
+      {inputs.morphemeAnalysis && (
         <>
           <p className="font-bold pt-4 pb-2">형태소 분석 결과:</p>
-          <pre>{morphemeAnalysis}</pre>
+          <pre>{inputs.morphemeAnalysis}</pre>
         </>
       )}
     </Modal>
