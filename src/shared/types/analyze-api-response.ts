@@ -2,7 +2,7 @@ export interface AnalyzeAPIResponse {
   detail: {
     custom_analyzer: boolean;
     charfilters: any[];
-    tokenizer: TokenizerDetail;
+    analyzer: TokenizerDetail;
     tokenfilters: any[];
   };
 }

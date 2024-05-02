@@ -17,8 +17,7 @@ export const compareDates = (date1: string, date2: string): number => {
  * @returns {object} 정의된 용어들과 형태소 분석 결과를 포함하는 객체
  */
 export const analyzeKeywordSuccessHandler = (data: AnalyzeAPIResponse) => {
-  const tokens = data.detail.tokenizer.tokens;
-
+  const tokens = data.detail.analyzer.tokens;
   // 토큰들 중 토큰 값이 형태소 목록에 포함되어 있는 경우를 필터링하여 정의된 용어 추출
   const definedTerms = tokens
     .filter((token) => token.morphemes && token.morphemes.includes(token.token))
