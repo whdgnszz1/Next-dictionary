@@ -24,7 +24,7 @@ export async function fetchAPI<T>(
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/schdic/api/v1/dic${url}`,
+      `${process.env.NEXT_PUBLIC_BASE_URL}/schm/api/v1/dic${url}`,
       config
     );
     if (!response.ok) {
