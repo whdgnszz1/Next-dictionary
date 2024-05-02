@@ -9,6 +9,16 @@ export const getColumns = (
   handleDelete: (srchSynId: number) => void
 ): ColumnsType<SynonymType> => [
   {
+    title: "방향",
+    dataIndex: "srchSynOneWayYsno",
+    key: "srchSynOneWayYsno",
+    sorter: (a: SynonymType, b: SynonymType) =>
+      a.srchSynOneWayYsno.localeCompare(b.srchSynOneWayYsno),
+    render: (srchSynOneWayYsno) =>
+      srchSynOneWayYsno === "Y" ? "단방향" : "양방향",
+    align: "center",
+  },
+  {
     title: "키워드",
     dataIndex: "srchSynKeyword",
     key: "srchSynKeyword",
@@ -18,6 +28,7 @@ export const getColumns = (
     title: "유의어",
     dataIndex: "srchSynTerm",
     key: "srchSynTerm",
+    render: (srchSynTerm) => srchSynTerm ?? "-",
     align: "center",
   },
   {
