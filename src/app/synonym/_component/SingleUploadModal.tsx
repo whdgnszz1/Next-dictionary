@@ -109,14 +109,16 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
   ) => {
     let value = e.target.value;
 
-    if (field === "keyword") {
+    if (field === "keyword" && srchSynOneWayYsno == "Y") {
       value = value.replace(/[\s,]+/g, "");
       setSrchSynKeyword(value);
-      if (/[\s,]/.test(e.target.value)) {
+      if (/[\s,]/.test(e.target.value) && srchSynOneWayYsno == "Y") {
         setInputError("키워드는 한 단어만 입력이 가능합니다.");
       } else {
         setInputError("");
       }
+    } else if (field === "keyword" && srchSynOneWayYsno == "N") {
+      setSrchSynKeyword(value);
     } else if (field === "term") {
       setSrchSynTerm(value);
     }
@@ -124,6 +126,9 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
 
   const handleChangeDirection = (e: RadioChangeEvent) => {
     setSrchSynOneWayYsno(e.target.value);
+    if (e.target.value === "N") {
+      setSrchSynTerm("");
+    }
   };
 
   const onCancelHandler = () => {
@@ -148,10 +153,25 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         />,
       ]}
     >
+      <div className="flex gap-2 py-2">
+        <Radio.Group onChange={handleChangeDirection} value={srchSynOneWayYsno}>
+          <Radio value="Y" disabled={!!initialSynonym}>
+            단방향
+          </Radio>
+          <Radio value="N" disabled={!!initialSynonym}>
+            양방향
+          </Radio>
+        </Radio.Group>
+      </div>
+      <p className="px-[2px] pb-1 font-semibold">키워드</p>
       <div className="flex gap-2">
         <CustomInput
           type="text"
-          placeholder="키워드 입력 (한 단어만 가능)"
+          placeholder={
+            srchSynOneWayYsno == "Y"
+              ? "키워드 입력 (한 단어만 가능)"
+              : "키워드 입력"
+          }
           value={srchSynKeyword}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             handleChange(e, "keyword")
@@ -161,20 +181,20 @@ const SingleUploadModal: React.FC<SingleUploadModalProps> = ({
         <PrimaryButton text="분석" onClick={handleAnalysis} />
       </div>
       {inputError && <InputError error={inputError} />}
-      <div className="flex gap-2 py-2">
-        <Radio.Group onChange={handleChangeDirection} value={srchSynOneWayYsno}>
-          <Radio value="Y">단방향</Radio>
-          <Radio value="N">양방향</Radio>
-        </Radio.Group>
-      </div>
-      <CustomInput
-        type="text"
-        placeholder="유의어 입력"
-        value={srchSynTerm}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          handleChange(e, "term")
-        }
-      />
+
+      {srchSynOneWayYsno === "Y" && (
+        <>
+          <p className="px-[2px] pb-1 mt-2 font-semibold">유의어</p>
+          <CustomInput
+            type="text"
+            placeholder="유의어 입력"
+            value={srchSynTerm}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              handleChange(e, "term")
+            }
+          />
+        </>
+      )}
 
       {userDefinedTerms && (
         <div>
