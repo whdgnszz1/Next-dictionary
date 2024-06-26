@@ -1,0 +1,1 @@
+export const SRCH_USER_KYWR_KEY = "SRCH_USER_KYWR";
